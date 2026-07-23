@@ -8,9 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/admin.css?v=2">
+  <link rel="stylesheet" href="css/admin.css?v=3">
+  <!--suppress HtmlUnknownTarget, JSUnresolvedLibraryURL -->
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
-  <script src="/socket.io/socket.io.js" defer></script>
+  <script src="js/socket.io.min.js" defer></script>
   <script src="js/admin.js?v=2" defer></script>
 </head>
 <body>
@@ -18,7 +19,7 @@
     <section class="login-panel" id="loginPanel"><span class="mark">W</span><p>Web мастер</p><h1>Вход в сообщения</h1><form id="loginForm"><label for="adminToken">Код доступа</label><input id="adminToken" type="password" autocomplete="current-password" required><button type="submit">Продолжить</button><p id="loginStatus" role="status"></p></form></section>
     <section class="inbox" id="inbox" hidden>
       <aside class="room-list"><div class="room-head"><div><span class="mark">W</span><strong>Сообщения</strong></div><button id="refreshRooms" type="button" aria-label="Обновить"><i data-lucide="refresh-cw" aria-hidden="true"></i></button></div><div id="rooms" class="rooms"></div></aside>
-      <section class="admin-chat"><header id="chatTitle">Выберите диалог</header><div class="admin-messages" id="adminMessages"></div><form id="adminForm" hidden><textarea id="adminInput" rows="1" maxlength="1000" placeholder="Ответ клиенту..."></textarea><button type="submit" aria-label="Отправить"><i data-lucide="send" aria-hidden="true"></i></button></form></section>
+      <section class="admin-chat"><header id="chatTitle">Выберите диалог</header><div class="admin-messages" id="adminMessages"></div><form id="adminForm" hidden><label class="sr-only" for="adminInput">Ответ клиенту</label><textarea id="adminInput" rows="1" maxlength="1000" placeholder="Ответ клиенту..."></textarea><button type="submit" aria-label="Отправить"><i data-lucide="send" aria-hidden="true"></i></button></form></section>
     </section>
   </main>
 </body>

@@ -14,10 +14,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=5">
+  <!--suppress HtmlUnknownTarget, JSUnresolvedLibraryURL -->
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
-  <script src="/socket.io/socket.io.js" defer></script>
-  <script src="js/main.js?v=5" defer></script>
+  <script src="js/socket.io.min.js" defer></script>
+  <script src="js/main.js?v=7" defer></script>
 </head>
 <body>
   <div class="page-loader" id="pageLoader" aria-label="Загрузка страницы">
@@ -76,6 +77,7 @@
     </section>
 
     <section class="trust-strip" aria-label="Преимущества">
+      <!--suppress SpellCheckingInspection -->
       <div class="container trust-inner reveal">
         <span>СТРАТЕГИЯ</span><i data-lucide="asterisk" aria-hidden="true"></i><span>ДИЗАЙН</span><i data-lucide="asterisk" aria-hidden="true"></i><span>РАЗРАБОТКА</span><i data-lucide="asterisk" aria-hidden="true"></i><span>ЗАПУСК</span>
       </div>
@@ -85,7 +87,7 @@
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow"><span></span>Возможности</p>
-          <div><h2 id="servicesTitle">Сайт, который помогает<br>клиенту сделать выбор.</h2><p>Собираю только нужные блоки: чтобы показать услугу, снять вопросы и привести человека к заявке.</p></div>
+          <div><h2 id="servicesTitle">Сайт, который помогает клиенту сделать выбор.</h2><p>Собираю только нужные блоки: чтобы показать услугу, снять вопросы и привести человека к заявке.</p></div>
         </div>
         <div class="services-grid">
           <article class="service-card card-large reveal" data-tilt><div class="card-icon"><i data-lucide="layout-template" aria-hidden="true"></i></div><p class="card-number">01</p><h3>Лендинг</h3><p>Одна услуга, ясная подача и понятный путь к заявке.</p></article>
@@ -102,14 +104,14 @@
         <ol class="process-list">
           <li class="reveal"><span>01</span><div><h3>Разбираем задачу</h3><p>Определяем цель сайта, аудиторию и нужный результат.</p></div></li>
           <li class="reveal" data-delay="80"><span>02</span><div><h3>Собираем подачу</h3><p>Утверждаем структуру, смысловые акценты и путь к заявке.</p></div></li>
-          <li class="reveal" data-delay="160"><span>03</span><div><h3>Верстаем и запускаем</h3><p>Проверяю адаптив, подключаю связь и передаю готовый сайт.</p></div></li>
+          <li class="reveal" data-delay="160"><span>03</span><div><h3>Верстаем и запускаем</h3><p>Проверяю адаптивную версию, подключаю связь и передаю готовый сайт.</p></div></li>
         </ol>
       </div>
     </section>
 
     <section class="section pricing-section" id="prices" aria-labelledby="pricesTitle">
       <div class="container">
-        <div class="section-head reveal"><p class="eyebrow"><span></span>Стоимость</p><div><h2 id="pricesTitle">Понятная стоимость<br>до начала работы.</h2><p>Сначала фиксируем объем, результат и срок. Финальная стоимость зависит от задачи.</p></div></div>
+        <div class="section-head reveal"><p class="eyebrow"><span></span>Стоимость</p><div><h2 id="pricesTitle">Понятная стоимость до начала работы.</h2><p>Сначала фиксируем объем, результат и срок. Финальная стоимость зависит от задачи.</p></div></div>
         <div class="price-grid">
           <article class="price-card reveal" data-tilt><p class="price-label">Точечная задача</p><h3>Доработка</h3><p>Один блок, форма или конкретное исправление.</p><div class="price"><small>от</small> <span id="priceFix">1 500</span> <b>Р</b></div><ul><li>Разбор задачи</li><li>Оценка срока</li><li>Одна доработка</li></ul><a class="price-link" href="#request">Оставить заявку <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
           <article class="price-card featured reveal" data-delay="80" data-tilt><p class="popular-badge">Основной формат</p><p class="price-label">Одностраничный сайт</p><h3>Лендинг</h3><p>Для одной услуги, продукта или рекламной кампании.</p><div class="price"><small>от</small> <span id="priceLanding">7 900</span> <b>Р</b></div><ul><li>Структура и дизайн</li><li>Адаптивная верстка</li><li>Форма заявки</li></ul><a class="price-link" href="#request">Выбрать формат <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
@@ -123,9 +125,10 @@
         <div class="request-copy reveal"><p class="eyebrow"><span></span>Обсудим задачу</p><h2 id="requestTitle">Расскажите, что нужно сделать.</h2><p>Заполните форму - откроется выбранный мессенджер с готовой заявкой. Или напишите в чат на сайте.</p><div class="request-points"><span><i data-lucide="check" aria-hidden="true"></i>Оценка объема и срока</span><span><i data-lucide="check" aria-hidden="true"></i>Без обязательств</span></div></div>
         <div class="form-panel glass-panel reveal" data-delay="100">
           <form id="leadForm" novalidate>
-            <div class="form-row"><label for="leadName">Имя<input id="leadName" type="text" name="name" placeholder="Иван" autocomplete="name" required></label><label for="leadPhone">Телефон<input id="leadPhone" type="tel" name="phone" placeholder="+7 999 000-00-00" autocomplete="tel" required></label></div>
+            <div class="form-row"><label for="leadName">Имя<input id="leadName" type="text" name="name" placeholder="Иван" autocomplete="name" required></label><label for="leadPhone">Телефон<input id="leadPhone" type="tel" name="phone" placeholder="+7 921 656-67-16" autocomplete="tel" required></label></div>
             <div class="form-row"><label for="leadService">Задача<select id="leadService" name="service"><option>Лендинг</option><option>Сайт-визитка</option><option>Доработка сайта</option><option>Форма заявки</option><option>Сайт под ключ</option></select></label><label for="leadBudget">Бюджет<select id="leadBudget" name="budget"><option>Нужна оценка</option><option>До 10 000 Р</option><option>10 000-30 000 Р</option><option>От 30 000 Р</option></select></label></div>
             <label for="leadMessage">Коротко о задаче<textarea id="leadMessage" name="message" placeholder="Например: лендинг для услуг, 5-6 блоков и заявки в Telegram."></textarea></label>
+            <!--suppress SpellCheckingInspection -->
             <div class="messenger-actions"><button class="button button-telegram" type="submit" data-channel="telegram"><i data-lucide="send" aria-hidden="true"></i>Telegram</button><button class="button button-whatsapp" type="submit" data-channel="whatsapp"><i data-lucide="message-circle" aria-hidden="true"></i>WhatsApp</button></div>
             <p class="form-hint">Нажатие откроет мессенджер с подготовленной заявкой.</p><div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
           </form>
@@ -137,25 +140,25 @@
       <div class="container">
         <div class="section-head reveal"><p class="eyebrow"><span></span>На связи</p><div><h2 id="contactsTitle">Контакты и оплата</h2><p>Выберите удобный способ связи. Реквизиты можно скопировать одним нажатием.</p></div></div>
         <div class="contacts-grid">
-          <article class="contact-card glass-panel reveal"><h3>Написать или позвонить</h3><div class="contact-list"><a id="phoneLink" href="tel:+79990000000"><i data-lucide="phone" aria-hidden="true"></i><span><small>Телефон</small><strong id="phoneText">+7 999 000-00-00</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="telegramLink" href="https://t.me/your_telegram_username" target="_blank" rel="noopener"><i data-lucide="send" aria-hidden="true"></i><span><small>Telegram</small><strong id="telegramText">@your_telegram_username</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="whatsappLink" href="https://wa.me/79990000000" target="_blank" rel="noopener"><i data-lucide="message-circle" aria-hidden="true"></i><span><small>WhatsApp</small><strong id="whatsappText">Написать</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="emailLink" href="mailto:hello@example.ru"><i data-lucide="mail" aria-hidden="true"></i><span><small>Почта</small><strong id="emailText">hello@example.ru</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a></div><button class="wide-chat-button" type="button" data-open-chat><span><i data-lucide="messages-square" aria-hidden="true"></i>Чат с исполнителем</span><span class="online-dot"></span></button></article>
+          <article class="contact-card glass-panel reveal"><h3>Написать или позвонить</h3><div class="contact-list"><a id="phoneLink" href="tel:+79216566716"><i data-lucide="phone" aria-hidden="true"></i><span><small>Телефон</small><strong id="phoneText">+7 921 656-67-16</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="telegramLink" href="https://t.me/GG22870" target="_blank" rel="noopener"><i data-lucide="send" aria-hidden="true"></i><span><small>Telegram</small><strong id="telegramText">@GG22870</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="whatsappLink" href="https://wa.me/79216566716" target="_blank" rel="noopener"><i data-lucide="message-circle" aria-hidden="true"></i><span><small>WhatsApp</small><strong id="whatsappText">+7 921 656-67-16</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="emailLink" href="mailto:mozhzhukhin@gmail.com"><i data-lucide="mail" aria-hidden="true"></i><span><small>Почта</small><strong id="emailText">mozhzhukhin@gmail.com</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a></div><button class="wide-chat-button" type="button" data-open-chat><span><i data-lucide="messages-square" aria-hidden="true"></i>Чат с исполнителем</span><span class="online-dot"></span></button></article>
           <article class="payment-card reveal" data-delay="100"><div class="payment-card-head"><div><p class="card-label">Оплата</p><h3>Перевод по реквизитам</h3></div><i data-lucide="credit-card" aria-hidden="true"></i></div><div class="bank-card"><div><span id="bankNameCard">Ваш банк</span><i data-lucide="wifi" aria-hidden="true"></i></div><strong id="cardNumberText">0000 0000 0000 0000</strong><div><span id="cardHolderText">Иван Иванов</span><span>МИР</span></div></div><div class="payment-info"><p>Получатель <strong id="paymentRecipientText">Иван Иванов</strong></p><p>Назначение <strong id="paymentPurposeText">Разработка сайта</strong></p></div><div class="payment-actions"><button class="button button-dark" type="button" data-copy="card"><i data-lucide="copy" aria-hidden="true"></i>Скопировать карту</button><button class="icon-button payment-copy" type="button" data-copy="details" aria-label="Скопировать все реквизиты"><i data-lucide="clipboard-copy" aria-hidden="true"></i></button></div><p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p></article>
         </div>
       </div>
     </section>
   </main>
 
-  <footer><div class="container footer-inner"><a class="brand" href="#top"><span class="brand-mark">W</span><span>Web мастер</span></a><p>© <span id="currentYear"></span> Разработка сайтов. Все права защищены.</p><button class="footer-chat" type="button" data-open-chat>Написать в чат <i data-lucide="arrow-up-right" aria-hidden="true"></i></button></div></footer>
+  <footer><div class="container footer-inner"><a class="brand" href="#top"><span class="brand-mark">W</span><span>Web мастер</span></a><p>© <span id="currentYear">2026</span> Разработка сайтов. Все права защищены.</p><button class="footer-chat" type="button" data-open-chat>Написать в чат <i data-lucide="arrow-up-right" aria-hidden="true"></i></button></div></footer>
   <button class="back-to-top icon-button" id="backToTop" type="button" aria-label="Наверх"><i data-lucide="arrow-up" aria-hidden="true"></i></button>
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
-  <aside class="chat-widget" id="chatWidget" role="dialog" aria-modal="true" aria-label="Чат с исполнителем" aria-hidden="true">
+  <div class="chat-widget" id="chatWidget" role="dialog" aria-modal="true" aria-label="Чат с исполнителем" aria-hidden="true">
     <div class="chat-header"><div class="chat-person"><span class="chat-avatar">W</span><span><strong>Web мастер</strong><small id="chatPresence">Проверяем связь...</small></span></div><div class="chat-header-actions"><button class="chat-action icon-button" id="chatSearchToggle" type="button" aria-label="Поиск в сообщениях"><i data-lucide="search" aria-hidden="true"></i></button><button class="chat-action icon-button" id="chatClose" type="button" aria-label="Закрыть чат"><i data-lucide="x" aria-hidden="true"></i></button></div></div>
     <div class="chat-search" id="chatSearch"><i data-lucide="search" aria-hidden="true"></i><input id="messageSearch" type="search" placeholder="Поиск по переписке" aria-label="Поиск по сообщениям"><button id="clearSearch" type="button" aria-label="Очистить поиск"><i data-lucide="x" aria-hidden="true"></i></button></div>
     <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
     <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span>Исполнитель печатает...</div>
     <div class="quick-replies" id="quickReplies"><button type="button">Нужен лендинг</button><button type="button">Уточнить стоимость</button><button type="button">Есть вопрос</button></div>
     <form class="chat-form" id="chatForm"><input class="file-input" id="chatFile" type="file" accept="image/*,.pdf,.doc,.docx,.txt"><label class="chat-action icon-button" for="chatFile" aria-label="Прикрепить фото или файл"><i data-lucide="paperclip" aria-hidden="true"></i></label><textarea id="chatInput" rows="1" maxlength="1000" placeholder="Сообщение..." aria-label="Текст сообщения"></textarea><button class="send-button" type="submit" aria-label="Отправить сообщение"><i data-lucide="arrow-up" aria-hidden="true"></i></button></form>
-  </aside>
+  </div>
   <button class="chat-fab" id="chatFab" type="button" data-open-chat aria-label="Открыть чат"><i data-lucide="message-circle" aria-hidden="true"></i><span class="chat-unread" id="chatUnread" hidden>0</span></button>
 </body>
 </html>
