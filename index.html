@@ -3,131 +3,259 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Web мастер разрабатывает лендинги и сайты-визитки для малого бизнеса: структура, дизайн, адаптивная верстка и заявки в мессенджеры.">
-  <meta name="theme-color" content="#0a1020">
-  <meta property="og:title" content="Web мастер - лендинги и сайты-визитки для бизнеса">
-  <meta property="og:description" content="Понятный сайт для услуг и малого бизнеса: от структуры до заявок в мессенджеры.">
+  <meta name="description" content="Строительство и ремонт частных домов: коробка, кровля, фасад, отделка и реконструкция. Предварительный расчет стоимости и заявка онлайн.">
+  <meta name="theme-color" content="#171b1a">
+  <meta property="og:title" content="СтройДом — строительство и ремонт частных домов">
+  <meta property="og:description" content="Строительные работы с понятными этапами: от осмотра объекта и сметы до приемки результата.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:site_name" content="Web мастер">
-  <title>Web мастер - лендинги и сайты-визитки для бизнеса</title>
+  <meta property="og:site_name" content="СтройДом">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>СтройДом — строительство и ремонт частных домов</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="preload" href="assets/construction-hero.webp" as="image" type="image/webp">
+  <link rel="stylesheet" href="css/style.css?v=10">
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="/socket.io/socket.io.js" defer></script>
-  <script src="js/main.js?v=5" defer></script>
+  <script src="js/main.js?v=8" defer></script>
 </head>
 <body>
-  <div class="page-loader" id="pageLoader" aria-label="Загрузка страницы">
-    <div class="loader-mark">W</div>
+  <div class="page-loader" id="pageLoader" role="status" aria-label="Загрузка страницы">
+    <span class="loader-mark">СД</span>
+    <span class="loader-line" aria-hidden="true"></span>
   </div>
 
   <header class="site-header" id="top">
     <div class="container nav-shell">
-      <a class="brand" href="#top" aria-label="Web мастер - в начало страницы">
-        <span class="brand-mark">W</span><span>Web мастер</span>
+      <a class="brand" href="#top" aria-label="СтройДом — в начало страницы">
+        <span class="brand-mark">СД</span>
+        <span class="brand-copy"><strong data-company>СтройДом</strong><small>строительная компания</small></span>
       </a>
       <button class="menu-toggle icon-button" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="siteMenu">
         <i data-lucide="menu" aria-hidden="true"></i>
       </button>
       <nav class="site-nav" id="siteMenu" aria-label="Основная навигация">
         <a href="#services">Услуги</a>
-        <a href="#process">Процесс</a>
-        <a href="#prices">Стоимость</a>
+        <a href="#projects">Работы</a>
+        <a href="#calculator">Калькулятор</a>
+        <a href="#reviews">Отзывы</a>
         <a href="#contacts">Контакты</a>
       </nav>
-      <button class="nav-chat" type="button" data-open-chat>
-        <i data-lucide="message-circle" aria-hidden="true"></i><span>Написать</span>
+      <button class="header-call" type="button" data-open-chat aria-label="Открыть чат со СтройДом">
+        <i data-lucide="message-circle" aria-hidden="true"></i><span>Обсудить проект</span>
       </button>
     </div>
   </header>
 
   <main>
-    <section class="hero section-dark" aria-labelledby="heroTitle">
-      <div class="container hero-grid">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-media" aria-hidden="true"></div>
+      <div class="container hero-inner">
         <div class="hero-copy reveal">
-          <p class="eyebrow"><span></span>Лендинги и сайты-визитки для малого бизнеса</p>
-          <h1 id="heroTitle">Сайт, который <em>объясняет ценность</em> и приводит обращения</h1>
-          <p class="hero-text">Для услуг, экспертов и небольших команд. Структура, дизайн, разработка и заявки - в одном проекте.</p>
+          <p class="eyebrow eyebrow-light"><span></span>Строительство и ремонт частных домов</p>
+          <h1 id="heroTitle">Дом, в котором всё сделано <em>по плану</em></h1>
+          <p class="hero-text">Берём на себя строительство, кровлю, фасад и отделку. Сначала разбираем задачу и считаем объём, затем фиксируем этапы работ.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#request"><span>Обсудить задачу</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
-            <button class="button button-ghost" type="button" data-open-chat><i data-lucide="messages-square" aria-hidden="true"></i><span>Задать вопрос</span></button>
+            <a class="button button-primary" href="#calculator"><span>Рассчитать стоимость</span><i data-lucide="calculator" aria-hidden="true"></i></a>
+            <button class="button button-ghost" type="button" data-open-chat><i data-lucide="messages-square" aria-hidden="true"></i><span>Обсудить объект</span></button>
           </div>
-          <div class="hero-proof" aria-label="Что входит в работу">
-            <div><i data-lucide="layout-template" aria-hidden="true"></i><span>Лендинг или сайт-визитка</span></div>
-            <div><i data-lucide="smartphone" aria-hidden="true"></i><span>Адаптация под устройства</span></div>
-            <div><i data-lucide="send" aria-hidden="true"></i><span>Форма и связь с клиентами</span></div>
+          <div class="hero-details" aria-label="Порядок работы">
+            <span><i data-lucide="clipboard-list" aria-hidden="true"></i>Смета до начала работ</span>
+            <span><i data-lucide="layers-3" aria-hidden="true"></i>Работа по этапам</span>
+            <span><i data-lucide="camera" aria-hidden="true"></i>Фотофиксация процесса</span>
           </div>
         </div>
-        <div class="hero-visual reveal" data-delay="120">
-          <div class="browser-card" data-tilt>
-            <div class="browser-bar"><span></span><span></span><span></span><div></div></div>
-            <div class="browser-preview">
-              <p>ВАШ БИЗНЕС</p><strong>Понятная подача услуги. Без лишних слов.</strong>
-              <div class="preview-lines"><span></span><span></span><span></span></div>
-              <div class="preview-button">Оставить заявку <i data-lucide="arrow-up-right" aria-hidden="true"></i></div>
-            </div>
-          </div>
-          <div class="floating-tag tag-project"><i data-lucide="sparkles" aria-hidden="true"></i>Дизайн под задачу</div>
+        <div class="hero-side reveal" data-delay="120">
+          <p>Нужна консультация?</p>
+          <strong>Расскажите, что планируете построить или отремонтировать.</strong>
+          <button type="button" data-open-chat><i data-lucide="message-circle" aria-hidden="true"></i><span>Открыть онлайн-чат</span></button>
         </div>
       </div>
     </section>
 
-    <section class="trust-strip" aria-label="Преимущества">
-      <div class="container trust-inner reveal">
-        <span>СТРАТЕГИЯ</span><i data-lucide="asterisk" aria-hidden="true"></i><span>ДИЗАЙН</span><i data-lucide="asterisk" aria-hidden="true"></i><span>РАЗРАБОТКА</span><i data-lucide="asterisk" aria-hidden="true"></i><span>ЗАПУСК</span>
+    <section class="work-strip" aria-label="Основные этапы">
+      <div class="container work-strip-inner reveal">
+        <span><b>01</b>Выезд и замеры</span>
+        <span><b>02</b>Смета и договор</span>
+        <span><b>03</b>Строительные работы</span>
+        <span><b>04</b>Приёмка объекта</span>
       </div>
     </section>
 
-    <section class="section" id="services" aria-labelledby="servicesTitle">
+    <section class="section services-section" id="services" aria-labelledby="servicesTitle">
       <div class="container">
         <div class="section-head reveal">
-          <p class="eyebrow"><span></span>Возможности</p>
-          <div><h2 id="servicesTitle">Сайт, который помогает<br>клиенту сделать выбор.</h2><p>Собираю только нужные блоки: чтобы показать услугу, снять вопросы и привести человека к заявке.</p></div>
+          <div><p class="eyebrow"><span></span>Услуги</p><h2 id="servicesTitle">Закрываем основные задачи по дому</h2></div>
+          <p>Можно заказать отдельный этап или комплекс работ. Точный состав и материалы определяем после знакомства с объектом.</p>
         </div>
         <div class="services-grid">
-          <article class="service-card card-large reveal" data-tilt><div class="card-icon"><i data-lucide="layout-template" aria-hidden="true"></i></div><p class="card-number">01</p><h3>Лендинг</h3><p>Одна услуга, ясная подача и понятный путь к заявке.</p></article>
-          <article class="service-card reveal" data-delay="80" data-tilt><div class="card-icon"><i data-lucide="briefcase-business" aria-hidden="true"></i></div><p class="card-number">02</p><h3>Сайт-визитка</h3><p>Услуги, преимущества, контакты и доверительная подача бизнеса.</p></article>
-          <article class="service-card reveal" data-delay="160" data-tilt><div class="card-icon"><i data-lucide="wand-sparkles" aria-hidden="true"></i></div><p class="card-number">03</p><h3>Доработки</h3><p>Исправляю верстку, формы и мобильную версию действующего сайта.</p></article>
-          <article class="service-card service-wide reveal" data-delay="120" data-tilt><div><div class="card-icon"><i data-lucide="send" aria-hidden="true"></i></div><p class="card-number">04</p><h3>Заявки и запуск</h3><p>Подключаю мессенджеры, контакты, оплату и готовлю сайт к публикации.</p></div><div class="service-orbit"><span>Telegram</span><span>WhatsApp</span><span>Оплата</span></div></article>
+          <article class="service-card reveal" data-service-choice="Строительство коробки" data-tilt>
+            <div class="card-top"><span>01</span><i data-lucide="house" aria-hidden="true"></i></div>
+            <h3>Строительство домов</h3><p>Фундамент, стены, перекрытия и подготовка коробки к следующим этапам.</p>
+            <button type="button">Рассчитать <i data-lucide="arrow-up-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="service-card reveal" data-delay="60" data-service-choice="Кровельные работы" data-tilt>
+            <div class="card-top"><span>02</span><i data-lucide="triangle" aria-hidden="true"></i></div>
+            <h3>Кровельные работы</h3><p>Монтаж и ремонт кровли, утепление, водостоки и безопасные элементы.</p>
+            <button type="button">Рассчитать <i data-lucide="arrow-up-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="service-card reveal" data-delay="120" data-service-choice="Фасадные работы" data-tilt>
+            <div class="card-top"><span>03</span><i data-lucide="panels-top-left" aria-hidden="true"></i></div>
+            <h3>Фасады</h3><p>Утепление, штукатурные системы, облицовка и обновление внешнего вида дома.</p>
+            <button type="button">Рассчитать <i data-lucide="arrow-up-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="service-card reveal" data-delay="40" data-service-choice="Внутренняя отделка" data-tilt>
+            <div class="card-top"><span>04</span><i data-lucide="paint-roller" aria-hidden="true"></i></div>
+            <h3>Внутренняя отделка</h3><p>Подготовка поверхностей, чистовые покрытия и комплексный ремонт помещений.</p>
+            <button type="button">Рассчитать <i data-lucide="arrow-up-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="service-card reveal" data-delay="100" data-service-choice="Инженерные работы" data-tilt>
+            <div class="card-top"><span>05</span><i data-lucide="cable" aria-hidden="true"></i></div>
+            <h3>Инженерные работы</h3><p>Электрика, водоснабжение, отопление и подготовка точек подключения.</p>
+            <button type="button">Обсудить <i data-lucide="arrow-up-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="service-card service-card-accent reveal" data-delay="160" data-service-choice="Ремонт и реконструкция" data-tilt>
+            <div class="card-top"><span>06</span><i data-lucide="hammer" aria-hidden="true"></i></div>
+            <h3>Ремонт и реконструкция</h3><p>Обновление дома, замена изношенных конструкций и адаптация под новые задачи.</p>
+            <button type="button">Обсудить <i data-lucide="arrow-up-right" aria-hidden="true"></i></button>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="section section-muted" id="process" aria-labelledby="processTitle">
+    <section class="section projects-section" id="projects" aria-labelledby="projectsTitle">
+      <div class="container">
+        <div class="section-head section-head-light reveal">
+          <div><p class="eyebrow eyebrow-light"><span></span>Галерея</p><h2 id="projectsTitle">Примеры объектов и работ</h2></div>
+          <p>Визуализации основных направлений: строительство дома, устройство кровли, внутренняя отделка и обновление фасада.</p>
+        </div>
+        <div class="project-grid">
+          <button class="project-card project-card-wide reveal" type="button" data-gallery-src="assets/project-house.webp" data-gallery-caption="Строительство одноэтажного дома">
+            <span class="media-skeleton"><img src="assets/project-house.webp" alt="Одноэтажный дом со светлым фасадом" width="1536" height="1024" loading="lazy"></span>
+            <span class="project-overlay"><small>Визуализация</small><strong>Строительство дома</strong><i data-lucide="maximize-2" aria-hidden="true"></i></span>
+          </button>
+          <button class="project-card reveal" type="button" data-delay="70" data-gallery-src="assets/project-roof.webp" data-gallery-caption="Монтаж металлической кровли">
+            <span class="media-skeleton"><img src="assets/project-roof.webp" alt="Дом с новой металлической кровлей" width="1536" height="1024" loading="lazy"></span>
+            <span class="project-overlay"><small>Визуализация</small><strong>Кровельные работы</strong><i data-lucide="maximize-2" aria-hidden="true"></i></span>
+          </button>
+          <button class="project-card reveal" type="button" data-delay="100" data-gallery-src="assets/project-interior.webp" data-gallery-caption="Внутренняя отделка дома">
+            <span class="media-skeleton"><img src="assets/project-interior.webp" alt="Современная внутренняя отделка гостиной" width="1536" height="1024" loading="lazy"></span>
+            <span class="project-overlay"><small>Визуализация</small><strong>Отделка интерьера</strong><i data-lucide="maximize-2" aria-hidden="true"></i></span>
+          </button>
+          <button class="project-card project-card-wide reveal" type="button" data-delay="140" data-gallery-src="assets/project-facade.webp" data-gallery-caption="Ремонт и отделка фасада">
+            <span class="media-skeleton"><img src="assets/project-facade.webp" alt="Обновлённый фасад двухэтажного дома" width="1536" height="1024" loading="lazy"></span>
+            <span class="project-overlay"><small>Визуализация</small><strong>Обновление фасада</strong><i data-lucide="maximize-2" aria-hidden="true"></i></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section process-section" aria-labelledby="processTitle">
       <div class="container process-layout">
-        <div class="process-intro reveal"><p class="eyebrow"><span></span>Как работаем</p><h2 id="processTitle">От задачи до готового сайта.</h2><p>Согласовываем главное в начале, чтобы не растягивать работу на бесконечные правки.</p><button class="text-button" type="button" data-open-chat>Задать вопрос в чате <i data-lucide="arrow-right" aria-hidden="true"></i></button></div>
+        <div class="process-intro reveal">
+          <p class="eyebrow"><span></span>Как работаем</p>
+          <h2 id="processTitle">Понятный маршрут от идеи до результата</h2>
+          <p>Сначала уточняем исходные данные. Это помогает оценить работу реалистично и не начинать с обещаний без осмотра.</p>
+          <button class="text-button" type="button" data-open-chat>Задать вопрос <i data-lucide="arrow-right" aria-hidden="true"></i></button>
+        </div>
         <ol class="process-list">
-          <li class="reveal"><span>01</span><div><h3>Разбираем задачу</h3><p>Определяем цель сайта, аудиторию и нужный результат.</p></div></li>
-          <li class="reveal" data-delay="80"><span>02</span><div><h3>Собираем подачу</h3><p>Утверждаем структуру, смысловые акценты и путь к заявке.</p></div></li>
-          <li class="reveal" data-delay="160"><span>03</span><div><h3>Верстаем и запускаем</h3><p>Проверяю адаптив, подключаю связь и передаю готовый сайт.</p></div></li>
+          <li class="reveal"><span>01</span><div><h3>Обсуждаем задачу</h3><p>Тип объекта, площадь, текущее состояние и желаемый результат.</p></div></li>
+          <li class="reveal" data-delay="60"><span>02</span><div><h3>Осматриваем объект</h3><p>Проводим замеры, проверяем условия и уточняем состав материалов.</p></div></li>
+          <li class="reveal" data-delay="120"><span>03</span><div><h3>Согласовываем смету</h3><p>Фиксируем этапы, объём, порядок оплаты и организационные детали.</p></div></li>
+          <li class="reveal" data-delay="180"><span>04</span><div><h3>Выполняем и сдаём</h3><p>Показываем ход работ и вместе принимаем готовый результат.</p></div></li>
         </ol>
       </div>
     </section>
 
-    <section class="section pricing-section" id="prices" aria-labelledby="pricesTitle">
-      <div class="container">
-        <div class="section-head reveal"><p class="eyebrow"><span></span>Стоимость</p><div><h2 id="pricesTitle">Понятная стоимость<br>до начала работы.</h2><p>Сначала фиксируем объем, результат и срок. Финальная стоимость зависит от задачи.</p></div></div>
-        <div class="price-grid">
-          <article class="price-card reveal" data-tilt><p class="price-label">Точечная задача</p><h3>Доработка</h3><p>Один блок, форма или конкретное исправление.</p><div class="price"><small>от</small> <span id="priceFix">1 500</span> <b>Р</b></div><ul><li>Разбор задачи</li><li>Оценка срока</li><li>Одна доработка</li></ul><a class="price-link" href="#request">Оставить заявку <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
-          <article class="price-card featured reveal" data-delay="80" data-tilt><p class="popular-badge">Основной формат</p><p class="price-label">Одностраничный сайт</p><h3>Лендинг</h3><p>Для одной услуги, продукта или рекламной кампании.</p><div class="price"><small>от</small> <span id="priceLanding">7 900</span> <b>Р</b></div><ul><li>Структура и дизайн</li><li>Адаптивная верстка</li><li>Форма заявки</li></ul><a class="price-link" href="#request">Выбрать формат <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
-          <article class="price-card reveal" data-delay="160" data-tilt><p class="price-label">Расширенный проект</p><h3>Под ключ</h3><p>Когда нужен цельный сайт с продуманной подачей.</p><div class="price"><small>от</small> <span id="priceTurnkey">15 900</span> <b>Р</b></div><ul><li>Индивидуальная структура</li><li>Контакты и оплата</li><li>Поддержка после запуска</li></ul><a class="price-link" href="#request">Обсудить проект <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
+    <section class="section calculator-section" id="calculator" aria-labelledby="calculatorTitle">
+      <div class="container calculator-layout">
+        <div class="calculator-copy reveal">
+          <p class="eyebrow eyebrow-light"><span></span>Калькулятор</p>
+          <h2 id="calculatorTitle">Оцените порядок стоимости</h2>
+          <p>Расчёт ориентировочный. Точная сумма зависит от объекта, материалов и условий выполнения работ.</p>
+          <div class="calculator-note"><i data-lucide="info" aria-hidden="true"></i><span>Предварительная оценка не является публичной офертой и уточняется после осмотра объекта.</span></div>
+        </div>
+        <form class="calculator-panel reveal" id="costCalculator" data-delay="100">
+          <div class="calculator-fields">
+            <label for="calcService">Вид работ
+              <select id="calcService" name="calcService">
+                <option value="house-shell">Строительство коробки</option>
+                <option value="turnkey-house">Дом под ключ</option>
+                <option value="roof">Кровельные работы</option>
+                <option value="facade">Фасадные работы</option>
+                <option value="renovation">Внутренняя отделка</option>
+              </select>
+            </label>
+            <label for="calcPackage">Комплектация
+              <select id="calcPackage" name="calcPackage">
+                <option value="base">Базовая</option>
+                <option value="standard" selected>Стандарт</option>
+                <option value="extended">Расширенная</option>
+              </select>
+            </label>
+          </div>
+          <div class="area-control">
+            <div class="area-head"><label for="calcArea">Площадь объекта</label><span><input id="calcArea" type="number" min="10" max="500" step="5" value="100" inputmode="numeric" aria-label="Площадь объекта в квадратных метрах"> м²</span></div>
+            <input id="calcAreaRange" type="range" min="10" max="500" step="5" value="100" aria-label="Изменить площадь объекта">
+            <div class="range-values" aria-hidden="true"><span>10 м²</span><span>500 м²</span></div>
+          </div>
+          <div class="calculator-result" aria-live="polite">
+            <div><small>Ориентировочно</small><strong id="calcTotal">3 400 000 ₽</strong></div>
+            <p id="calcSummary">Строительство коробки · 100 м² · стандарт</p>
+          </div>
+          <button class="button button-primary" id="useEstimate" type="button"><span>Получить точную смету</span><i data-lucide="arrow-down-right" aria-hidden="true"></i></button>
+        </form>
+      </div>
+    </section>
+
+    <section class="section reviews-section" id="reviews" aria-labelledby="reviewsTitle">
+      <div class="container reviews-layout">
+        <div class="section-head reveal">
+          <div><p class="eyebrow"><span></span>Отзывы клиентов</p><h2 id="reviewsTitle">Только реальные истории</h2></div>
+          <p>Отзыв публикуется с разрешения заказчика и может быть дополнен фотографиями объекта. Выдуманных имён и оценок здесь нет.</p>
+        </div>
+        <div class="reviews-empty reveal" data-delay="80">
+          <i data-lucide="quote" aria-hidden="true"></i>
+          <div><h3>Раздел готов для ваших отзывов</h3><p>После первых согласованных публикаций здесь появятся реальные впечатления клиентов о ходе и результате работ.</p></div>
+          <button class="text-button" type="button" data-open-chat>Оставить отзыв <i data-lucide="message-circle" aria-hidden="true"></i></button>
         </div>
       </div>
     </section>
 
     <section class="section request-section" id="request" aria-labelledby="requestTitle">
       <div class="container request-layout">
-        <div class="request-copy reveal"><p class="eyebrow"><span></span>Обсудим задачу</p><h2 id="requestTitle">Расскажите, что нужно сделать.</h2><p>Заполните форму - откроется выбранный мессенджер с готовой заявкой. Или напишите в чат на сайте.</p><div class="request-points"><span><i data-lucide="check" aria-hidden="true"></i>Оценка объема и срока</span><span><i data-lucide="check" aria-hidden="true"></i>Без обязательств</span></div></div>
-        <div class="form-panel glass-panel reveal" data-delay="100">
+        <div class="request-copy reveal">
+          <p class="eyebrow eyebrow-light"><span></span>Заявка</p>
+          <h2 id="requestTitle">Расскажите о вашем объекте</h2>
+          <p>Оставьте основные данные. Заявка будет сохранена на сервере и появится в панели сообщений.</p>
+          <div class="request-contacts">
+            <button type="button" data-open-chat><i data-lucide="message-circle" aria-hidden="true"></i>Написать в онлайн-чат</button>
+          </div>
+        </div>
+        <div class="form-panel reveal" data-delay="100">
           <form id="leadForm" novalidate>
-            <div class="form-row"><label for="leadName">Имя<input id="leadName" type="text" name="name" placeholder="Иван" autocomplete="name" required></label><label for="leadPhone">Телефон<input id="leadPhone" type="tel" name="phone" placeholder="+7 999 000-00-00" autocomplete="tel" required></label></div>
-            <div class="form-row"><label for="leadService">Задача<select id="leadService" name="service"><option>Лендинг</option><option>Сайт-визитка</option><option>Доработка сайта</option><option>Форма заявки</option><option>Сайт под ключ</option></select></label><label for="leadBudget">Бюджет<select id="leadBudget" name="budget"><option>Нужна оценка</option><option>До 10 000 Р</option><option>10 000-30 000 Р</option><option>От 30 000 Р</option></select></label></div>
-            <label for="leadMessage">Коротко о задаче<textarea id="leadMessage" name="message" placeholder="Например: лендинг для услуг, 5-6 блоков и заявки в Telegram."></textarea></label>
-            <div class="messenger-actions"><button class="button button-telegram" type="submit" data-channel="telegram"><i data-lucide="send" aria-hidden="true"></i>Telegram</button><button class="button button-whatsapp" type="submit" data-channel="whatsapp"><i data-lucide="message-circle" aria-hidden="true"></i>WhatsApp</button></div>
-            <p class="form-hint">Нажатие откроет мессенджер с подготовленной заявкой.</p><div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+            <div class="form-row">
+              <label for="leadName">Имя<input id="leadName" type="text" name="name" placeholder="Иван" autocomplete="name" minlength="2" required></label>
+              <label for="leadPhone">Телефон<input id="leadPhone" type="tel" name="phone" placeholder="+7 999 000-00-00" autocomplete="tel" required></label>
+            </div>
+            <div class="form-row">
+              <label for="leadService">Какие работы нужны
+                <select id="leadService" name="service">
+                  <option>Строительство коробки</option><option>Дом под ключ</option><option>Кровельные работы</option><option>Фасадные работы</option><option>Внутренняя отделка</option><option>Инженерные работы</option><option>Ремонт и реконструкция</option>
+                </select>
+              </label>
+              <label for="leadBudget">Бюджет
+                <select id="leadBudget" name="budget"><option>Нужна оценка</option><option>До 500 000 ₽</option><option>500 000–1 500 000 ₽</option><option>1 500 000–5 000 000 ₽</option><option>От 5 000 000 ₽</option></select>
+              </label>
+            </div>
+            <label for="leadMessage">Об объекте<textarea id="leadMessage" name="message" maxlength="1500" placeholder="Например: ремонт кровли частного дома, площадь около 140 м²."></textarea></label>
+            <div class="lead-actions">
+              <button class="button button-primary lead-submit" type="submit"><i data-lucide="send" aria-hidden="true"></i>Отправить заявку</button>
+            </div>
+            <p class="form-hint">Нажимая кнопку, вы передаёте данные для ответа на заявку.</p>
+            <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
           </form>
         </div>
       </div>
@@ -135,25 +263,54 @@
 
     <section class="section contacts-section" id="contacts" aria-labelledby="contactsTitle">
       <div class="container">
-        <div class="section-head reveal"><p class="eyebrow"><span></span>На связи</p><div><h2 id="contactsTitle">Контакты и оплата</h2><p>Выберите удобный способ связи. Реквизиты можно скопировать одним нажатием.</p></div></div>
+        <div class="section-head reveal">
+          <div><p class="eyebrow"><span></span>Контакты</p><h2 id="contactsTitle">Свяжитесь удобным способом</h2></div>
+          <p>Для предварительной оценки подготовьте адрес объекта, примерную площадь и краткое описание задачи.</p>
+        </div>
         <div class="contacts-grid">
-          <article class="contact-card glass-panel reveal"><h3>Написать или позвонить</h3><div class="contact-list"><a id="phoneLink" href="tel:+79990000000"><i data-lucide="phone" aria-hidden="true"></i><span><small>Телефон</small><strong id="phoneText">+7 999 000-00-00</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="telegramLink" href="https://t.me/your_telegram_username" target="_blank" rel="noopener"><i data-lucide="send" aria-hidden="true"></i><span><small>Telegram</small><strong id="telegramText">@your_telegram_username</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="whatsappLink" href="https://wa.me/79990000000" target="_blank" rel="noopener"><i data-lucide="message-circle" aria-hidden="true"></i><span><small>WhatsApp</small><strong id="whatsappText">Написать</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="emailLink" href="mailto:hello@example.ru"><i data-lucide="mail" aria-hidden="true"></i><span><small>Почта</small><strong id="emailText">hello@example.ru</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a></div><button class="wide-chat-button" type="button" data-open-chat><span><i data-lucide="messages-square" aria-hidden="true"></i>Чат с исполнителем</span><span class="online-dot"></span></button></article>
-          <article class="payment-card reveal" data-delay="100"><div class="payment-card-head"><div><p class="card-label">Оплата</p><h3>Перевод по реквизитам</h3></div><i data-lucide="credit-card" aria-hidden="true"></i></div><div class="bank-card"><div><span id="bankNameCard">Ваш банк</span><i data-lucide="wifi" aria-hidden="true"></i></div><strong id="cardNumberText">0000 0000 0000 0000</strong><div><span id="cardHolderText">Иван Иванов</span><span>МИР</span></div></div><div class="payment-info"><p>Получатель <strong id="paymentRecipientText">Иван Иванов</strong></p><p>Назначение <strong id="paymentPurposeText">Разработка сайта</strong></p></div><div class="payment-actions"><button class="button button-dark" type="button" data-copy="card"><i data-lucide="copy" aria-hidden="true"></i>Скопировать карту</button><button class="icon-button payment-copy" type="button" data-copy="details" aria-label="Скопировать все реквизиты"><i data-lucide="clipboard-copy" aria-hidden="true"></i></button></div><p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p></article>
+          <article class="contact-panel reveal">
+            <div class="contact-panel-head"><div><small>Строительная компания</small><h3 data-company>СтройДом</h3></div><i data-lucide="hard-hat" aria-hidden="true"></i></div>
+            <div class="contact-note">
+              <i data-lucide="shield-check" aria-hidden="true"></i>
+              <div><strong>Без публичных личных данных</strong><p>Для связи используйте форму заявки или онлайн-чат на сайте.</p></div>
+            </div>
+            <button class="wide-chat-button" type="button" data-open-chat><span><i data-lucide="messages-square" aria-hidden="true"></i>Открыть онлайн-чат</span><i data-lucide="arrow-right" aria-hidden="true"></i></button>
+          </article>
+          <article class="payment-card reveal" data-delay="90">
+            <div class="payment-card-head"><div><p class="card-label">Оплата работ</p><h3>Реквизиты для перевода</h3></div><i data-lucide="credit-card" aria-hidden="true"></i></div>
+            <div class="bank-card"><div><span id="bankNameCard">Ваш банк</span><i data-lucide="wifi" aria-hidden="true"></i></div><strong id="cardNumberText">0000 0000 0000 0000</strong><small id="cardHolderText">Получатель не указан</small></div>
+            <div class="payment-info"><p><span>Получатель</span><strong id="paymentRecipientText">Получатель не указан</strong></p><p><span>Назначение</span><strong id="paymentPurposeText">Строительные работы</strong></p></div>
+            <div class="payment-actions"><button class="button button-payment" type="button" data-copy="details"><i data-lucide="copy" aria-hidden="true"></i>Скопировать реквизиты</button><button class="icon-button payment-copy" type="button" data-copy="card" aria-label="Скопировать номер карты"><i data-lucide="copy" aria-hidden="true"></i></button></div>
+            <p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p>
+          </article>
         </div>
       </div>
     </section>
   </main>
 
-  <footer><div class="container footer-inner"><a class="brand" href="#top"><span class="brand-mark">W</span><span>Web мастер</span></a><p>© <span id="currentYear"></span> Разработка сайтов. Все права защищены.</p><button class="footer-chat" type="button" data-open-chat>Написать в чат <i data-lucide="arrow-up-right" aria-hidden="true"></i></button></div></footer>
+  <footer>
+    <div class="container footer-inner">
+      <a class="brand brand-footer" href="#top"><span class="brand-mark">СД</span><span class="brand-copy"><strong data-company>СтройДом</strong><small>строительная компания</small></span></a>
+      <p>© <span id="currentYear"></span> <span data-company>СтройДом</span>. Информация на сайте не является публичной офертой.</p>
+      <button class="footer-chat" type="button" data-open-chat><i data-lucide="message-circle" aria-hidden="true"></i>Задать вопрос</button>
+    </div>
+  </footer>
+
+  <dialog class="gallery-dialog" id="galleryDialog" aria-labelledby="galleryDialogTitle">
+    <button class="gallery-close icon-button" id="galleryClose" type="button" aria-label="Закрыть изображение"><i data-lucide="x" aria-hidden="true"></i></button>
+    <img id="galleryDialogImage" src="assets/project-house.webp" alt="">
+    <p id="galleryDialogTitle">Проект</p>
+  </dialog>
+
   <button class="back-to-top icon-button" id="backToTop" type="button" aria-label="Наверх"><i data-lucide="arrow-up" aria-hidden="true"></i></button>
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
-  <aside class="chat-widget" id="chatWidget" role="dialog" aria-modal="true" aria-label="Чат с исполнителем" aria-hidden="true">
-    <div class="chat-header"><div class="chat-person"><span class="chat-avatar">W</span><span><strong>Web мастер</strong><small id="chatPresence">Проверяем связь...</small></span></div><div class="chat-header-actions"><button class="chat-action icon-button" id="chatSearchToggle" type="button" aria-label="Поиск в сообщениях"><i data-lucide="search" aria-hidden="true"></i></button><button class="chat-action icon-button" id="chatClose" type="button" aria-label="Закрыть чат"><i data-lucide="x" aria-hidden="true"></i></button></div></div>
+  <aside class="chat-widget" id="chatWidget" role="dialog" aria-modal="true" aria-label="Чат со строительной компанией" aria-hidden="true">
+    <div class="chat-header"><div class="chat-person"><span class="chat-avatar">СД</span><span><strong data-company>СтройДом</strong><small id="chatPresence">Проверяем связь...</small></span></div><div class="chat-header-actions"><button class="chat-action icon-button" id="chatSearchToggle" type="button" aria-label="Поиск в сообщениях"><i data-lucide="search" aria-hidden="true"></i></button><button class="chat-action icon-button" id="chatClose" type="button" aria-label="Закрыть чат"><i data-lucide="x" aria-hidden="true"></i></button></div></div>
     <div class="chat-search" id="chatSearch"><i data-lucide="search" aria-hidden="true"></i><input id="messageSearch" type="search" placeholder="Поиск по переписке" aria-label="Поиск по сообщениям"><button id="clearSearch" type="button" aria-label="Очистить поиск"><i data-lucide="x" aria-hidden="true"></i></button></div>
     <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
-    <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span>Исполнитель печатает...</div>
-    <div class="quick-replies" id="quickReplies"><button type="button">Нужен лендинг</button><button type="button">Уточнить стоимость</button><button type="button">Есть вопрос</button></div>
+    <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span>Менеджер печатает...</div>
+    <div class="quick-replies" id="quickReplies"><button type="button">Нужно рассчитать дом</button><button type="button">Интересует кровля</button><button type="button">Нужен ремонт</button></div>
     <form class="chat-form" id="chatForm"><input class="file-input" id="chatFile" type="file" accept="image/*,.pdf,.doc,.docx,.txt"><label class="chat-action icon-button" for="chatFile" aria-label="Прикрепить фото или файл"><i data-lucide="paperclip" aria-hidden="true"></i></label><textarea id="chatInput" rows="1" maxlength="1000" placeholder="Сообщение..." aria-label="Текст сообщения"></textarea><button class="send-button" type="submit" aria-label="Отправить сообщение"><i data-lucide="arrow-up" aria-hidden="true"></i></button></form>
   </aside>
   <button class="chat-fab" id="chatFab" type="button" data-open-chat aria-label="Открыть чат"><i data-lucide="message-circle" aria-hidden="true"></i><span class="chat-unread" id="chatUnread" hidden>0</span></button>

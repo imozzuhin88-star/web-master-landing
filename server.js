@@ -51,7 +51,12 @@ app.post("/api/leads", limiter, (req, res) => { const lead = leadSchema.safePars
 app.post("/api/uploads", limiter, upload.single("file"), (req, res) => { if (!req.file || !z.string().uuid().safeParse(req.body.room).success) return res.status(400).json({ error: "Файл или комната не прошли проверку" }); res.status(201).json({ fileUrl: `/uploads/${req.file.filename}`, fileName: req.file.originalname, fileType: req.file.mimetype }); });
 app.post("/api/admin/login", adminLimiter, (req, res) => { if (!hasAdminAccess(req.body?.token)) return res.status(401).json({ error: "Неверный код доступа" }); res.json({ ok: true }); });
 app.get("/api/admin/rooms", adminLimiter, (req, res) => { if (!hasAdminAccess(req.headers.authorization?.replace("Bearer ", ""))) return res.status(401).json({ error: "Требуется доступ" }); res.json(db.prepare("SELECT room, MAX(createdAt) AS lastActivity, MAX(text) AS lastMessage FROM messages GROUP BY room ORDER BY lastActivity DESC LIMIT 100").all()); });
-app.use((error, _, res, __) => { if (error instanceof multer.MulterError) return res.status(400).json({ error: "Файл слишком большой или не поддерживается" }); console.error(error); res.status(500).json({ error: "Внутренняя ошибка сервера" }); });
+app.use((error, _, res, __) => {
+  if (error?.type === "entity.parse.failed") return res.status(400).json({ error: "Некорректный JSON" });
+  if (error instanceof multer.MulterError) return res.status(400).json({ error: "Файл слишком большой или не поддерживается" });
+  console.error(error);
+  return res.status(500).json({ error: "Внутренняя ошибка сервера" });
+});
 
 io.on("connection", (socket) => {
   socket.on("join", ({ room }) => { if (!z.string().uuid().safeParse(room).success) return; socket.join(room); socket.emit("presence", { online: adminCount > 0 }); });
@@ -60,4 +65,4 @@ io.on("connection", (socket) => {
   socket.on("message", (data) => { const message = messageSchema.safeParse(data); if (!message.success || (message.data.author === "seller" && !socket.data.isAdmin)) return socket.emit("error-message", { error: "Сообщение не прошло проверку" }); saveMessage(message.data); io.to(message.data.room).emit("message", message.data); });
   socket.on("disconnect", () => { if (socket.data.isAdmin) { adminCount = Math.max(0, adminCount - 1); broadcastPresence(); } });
 });
-server.listen(PORT, () => console.log(`Web master is running on http://localhost:${PORT}`));
+server.listen(PORT, () => console.log(`StroyDom is running on http://localhost:${PORT}`));
