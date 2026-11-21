@@ -53,3 +53,45 @@
 
 /* Product controls use the same readable typography as the form. */
 .motion-preference{font-size:14px;min-height:44px;cursor:pointer}.motion-caption{font-size:14px}.motion-body{grid-template-columns:1.25fr 1fr}
+
+/* The visible site preference owns motion, including legacy OS-only styles.
+   Scroll-driven variables also work without CSS animation-timeline support. */
+body[data-motion="on"][data-theme="larper"]::after {
+  animation:none!important;
+  transform:scale(1.25) translate(var(--ambient-x,0%),var(--ambient-y,8%))!important;
+  opacity:.92;
+  will-change:transform;
+}
+body[data-motion="on"] .trust-inner svg {
+  transform:rotate(var(--strip-turn,0deg));
+  color:var(--studio-cyan);
+}
+body[data-motion="on"].motion-ready .reveal {
+  transition:opacity 850ms var(--motion-ease) var(--delay,0ms),translate 850ms var(--motion-ease) var(--delay,0ms)!important;
+}
+body[data-motion="on"].motion-ready .reveal:not(.is-visible):not(:focus-within) {
+  opacity:0;
+  translate:0 clamp(32px,4.6vw,54px);
+}
+body[data-motion="on"] .motion-browser { transform:rotateY(-9deg) rotateX(5deg); }
+body[data-motion="on"] .motion-stage:hover .motion-browser { transform:none; }
+body[data-motion="on"] .motion-feature {
+  transition:opacity 600ms ease,transform 600ms ease!important;
+}
+body[data-motion="on"] .motion-feature:not(.active) { opacity:.2; transform:translateY(16px); }
+body[data-motion="on"] .motion-feature.active { opacity:1; transform:none; }
+body[data-motion="on"] .process-list.motion-path li {
+  transition:opacity 500ms ease,translate 600ms ease!important;
+}
+body[data-motion="on"] .process-list.motion-path li:not(.path-active) { opacity:.3; translate:12px 0; }
+body[data-motion="on"] .process-list.motion-path li.path-active { opacity:1; translate:0; }
+body[data-motion="on"] .process-list::after { transform:scaleY(var(--path-progress,0)); }
+body[data-motion="off"]::after { animation:none!important; transform:none!important; }
+body[data-motion="off"] :is(.reveal,.motion-feature,.process-list.motion-path li) {
+  opacity:1!important;
+  transform:none!important;
+  translate:none!important;
+  transition:none!important;
+}
+body[data-motion="off"] :is(.motion-browser,.depth-card) { transform:none!important; }
+body[data-motion="off"] .process-list::after { transform:scaleY(1); }

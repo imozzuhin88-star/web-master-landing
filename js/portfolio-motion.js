@@ -1,7 +1,6 @@
 /* Approved landing motion: no backend dependencies. */
 (function setupPortfolioMotion() {
 
-const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const stage = document.createElement('div'); stage.className = 'motion-stage';
 stage.innerHTML = '<div class="motion-browser"><div class="motion-toolbar">● ● ● <span style="float:right">ваш будущий сайт</span></div><div class="motion-body"><div class="motion-piece motion-mini-nav" style="--i:0"><b>YOUR STUDIO</b><span>Проекты / Контакты</span></div><div><div class="motion-piece motion-mini-copy" style="--i:1">Из идеи.<br><em>В настоящий<br>сайт.</em></div><div class="motion-piece motion-lines" style="--i:3"><span></span><span></span></div><span class="motion-piece motion-mini-button" style="--i:4">Обсудить проект</span></div><div class="motion-piece motion-mini-art" style="--i:2"><strong>CREATE</strong></div></div></div><div class="motion-caption"><span>Структура. Дизайн. Запуск.</span></div>';
 document.querySelector('.hero-visual').prepend(stage);
@@ -17,10 +16,32 @@ stage.append(control);
 const enabled = control.querySelector('input');
 let preference;
 try { preference = localStorage.getItem('web-master-motion'); } catch {}
-// Keep the entrance visible on a first visit; reduced motion uses gentle fades.
+// This explicit site setting controls every approved effect consistently.
 enabled.checked = preference !== 'off';
+
+function applyMotionPreference() {
+  document.body.dataset.motion = enabled.checked ? 'on' : 'off';
+  document.body.classList.add('motion-ready');
+}
+applyMotionPreference();
+
+// The original reveals were gated by a separate OS-only setting. Use the site
+// preference here as well, including when the browser reports reduced motion.
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    });
+  }, { rootMargin: '0px 0px -56px' });
+  document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(element));
+} else {
+  document.querySelectorAll('.reveal').forEach(element => element.classList.add('is-visible'));
+}
 enabled.addEventListener('change', () => {
   try { localStorage.setItem('web-master-motion', enabled.checked ? 'on' : 'off'); } catch {}
+  applyMotionPreference();
   updateStudy();
 });
 let activeAnimations = [];
@@ -40,12 +61,10 @@ async function playAssembly() {
   stage.querySelectorAll('.motion-piece').forEach((element, index) => {
     element.style.animation = 'none';
     const order = Number(element.style.getPropertyValue('--i')) || index;
-    activeAnimations.push(element.animate(reduced ? [
-      { opacity: 0 }, { opacity: 1 }
-    ] : [
+    activeAnimations.push(element.animate([
       { opacity:0, transform:'translate3d(0,65px,-150px) rotateX(18deg) scale(.9)', filter:'blur(10px)' },
       { opacity:1, transform:'translate3d(0,0,0) rotateX(0deg) scale(1)', filter:'blur(0)' }
-    ], {duration:reduced ? 500 : 1100, delay:order*(reduced ? 100 : 250), easing:'cubic-bezier(.16,1,.3,1)', fill:'both'}));
+    ], {duration:1100, delay:order*250, easing:'cubic-bezier(.16,1,.3,1)', fill:'both'}));
   });
   await Promise.all(activeAnimations.map(animation => animation.finished.catch(() => {})));
   if (current !== generation) return;
@@ -68,7 +87,25 @@ showcase.innerHTML='<div class="motion-project-frame"><img src="assets/steam-des
 document.querySelector('.project-list').before(showcase);
 const pathList=document.querySelector('.process-list');pathList.classList.add('motion-path');
 let queued=false;
-function updateStudy(){queued=false;const h=innerHeight;const r=showcase.getBoundingClientRect();const p=Math.max(0,Math.min(1,(h*.88-r.top)/(h*.65)));const frame=showcase.querySelector('.motion-project-frame');if(enabled.checked){frame.style.transform='scale('+(.84+p*.16)+') rotate('+(-4+p*4)+'deg)';frame.style.opacity=String(.65+p*.35);}showcase.querySelectorAll('.motion-feature').forEach((el,i)=>el.classList.toggle('active',!enabled.checked||p>.2+i*.23));const pr=pathList.getBoundingClientRect();pathList.style.setProperty('--path-progress',enabled.checked?Math.max(0,Math.min(1,(h*.72-pr.top)/pr.height)):1);pathList.querySelectorAll('li').forEach(el=>el.classList.toggle('path-active',!enabled.checked||el.getBoundingClientRect().top<h*.72));}
+function updateStudy() {
+  queued = false;
+  const height = innerHeight;
+  const rect = showcase.getBoundingClientRect();
+  const progress = Math.max(0, Math.min(1, (height * .88 - rect.top) / (height * .65)));
+  const pageProgress = Math.max(0, Math.min(1, scrollY / Math.max(1, document.documentElement.scrollHeight - height)));
+  document.body.style.setProperty('--ambient-x', enabled.checked ? (Math.sin(pageProgress * Math.PI * 2) * 11).toFixed(2) + '%' : '0%');
+  document.body.style.setProperty('--ambient-y', enabled.checked ? (Math.cos(pageProgress * Math.PI * 2) * 8).toFixed(2) + '%' : '0%');
+  document.body.style.setProperty('--strip-turn', enabled.checked ? (scrollY * .07).toFixed(1) + 'deg' : '0deg');
+  showcase.querySelectorAll('.motion-feature').forEach((element, index) => {
+    element.classList.toggle('active', !enabled.checked || progress > .2 + index * .23);
+  });
+  const pathRect = pathList.getBoundingClientRect();
+  const pathProgress = Math.max(0, Math.min(1, (height * .72 - pathRect.top) / pathRect.height));
+  pathList.style.setProperty('--path-progress', enabled.checked ? pathProgress : 1);
+  pathList.querySelectorAll('li').forEach(element => {
+    element.classList.toggle('path-active', !enabled.checked || element.getBoundingClientRect().top < height * .72);
+  });
+}
 addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateStudy);}},{passive:true});addEventListener('resize',updateStudy);updateStudy();
 
 
@@ -120,14 +157,12 @@ addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(upd
       const x=Number(tile.dataset.x),y=Number(tile.dataset.y);
       const distance=Math.hypot((x-columns*.48)*.9,(y-rows*.38)*1.15);
       const delay=180+distance*95+((x*7+y*11)%5)*28;
-      animations.push(tile.animate(reduced ? [
-        { opacity: 1 }, { opacity: 0 }
-      ] : [
+      animations.push(tile.animate([
         {opacity:1,transform:'perspective(700px) translate3d(0,0,0) rotateX(0deg) scale(1.025)',offset:0,background:'#100d18'},
         {opacity:1,transform:'perspective(700px) translate3d(0,0,0) rotateX(0deg) scale(.94)',offset:.22,background:'#55336f'},
         {opacity:.65,transform:'perspective(700px) translate3d(0,-9px,20px) rotateX(24deg) scale(.65)',offset:.56,background:'#392347'},
         {opacity:0,transform:'perspective(700px) translate3d(0,-24px,70px) rotateX(65deg) scale(.12)',background:'#100d18'}
-      ],{duration:reduced ? 600 : 950,delay:reduced ? delay*.55 : delay,easing:'cubic-bezier(.2,.65,.25,1)',fill:'both'}));
+      ],{duration:950,delay,easing:'cubic-bezier(.2,.65,.25,1)',fill:'both'}));
     });
     await Promise.all(animations.map(a=>a.finished.catch(()=>{})));
     if(run!==sequence)return;
