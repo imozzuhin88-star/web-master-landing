@@ -24,10 +24,10 @@ const $ = (selector, parent = document) => parent.querySelector(selector);
  * @returns {Element[]}
  */
 const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
+const isStaticLanding = location.protocol === "file:" || location.hostname.endsWith(".github.io");
 const storageKey = "web-master-chat-session";
 const sessionId = localStorage.getItem(storageKey) || crypto.randomUUID();
 localStorage.setItem(storageKey, sessionId);
-let selectedChannel = "telegram";
 let socket = null;
 let messages = [];
 let unread = 0;
@@ -49,21 +49,121 @@ function initializeContacts() {
 }
 
 function buildLeadMessage(data) { return ["Новая заявка на разработку сайта", "", `Имя: ${data.name}`, `Телефон: ${data.phone}`, `Задача: ${data.service}`, `Бюджет: ${data.budget}`, `Детали: ${data.message || "не указаны"}`].join("\n"); }
-async function sendLead(data) { try { await fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }); } catch { /* Static hosting keeps the messenger flow available. */ } }
+async function sendLead(data) { if (isStaticLanding) return; try { await fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }); } catch { /* The messenger stays available when the server is unreachable. */ } }
+
+function setupProjectCase() {
+  const panel = $("#steam-case");
+  if (!panel) return;
+  const openFromHash = () => {
+    if (location.hash === "#steam-case") panel.open = true;
+  };
+  window.addEventListener("hashchange", openFromHash);
+  $$('[href="#steam-case"]').forEach((link) => link.addEventListener("click", () => {
+    panel.open = true;
+  }));
+  openFromHash();
+}
+
+setupProjectCase();
 
 function setupLeadForm() {
-  const form = $("#leadForm"); const status = $("#formStatus");
-  $$('[data-channel]', form).forEach((button) => button.addEventListener("click", () => { selectedChannel = button.dataset.channel; }));
-  form.addEventListener("submit", async (event) => {
+  const form = $("#leadForm");
+  const status = $("#formStatus");
+  const service = $("#leadService");
+  const site = $("#leadSite");
+  const message = $("#leadMessage");
+  const reference = $("#leadReference");
+  const referenceText = $("#leadReferenceText");
+  const draftPanel = $("#leadDraftPanel");
+  const draft = $("#leadDraft");
+  const telegram = $("#leadTelegram");
+  const whatsapp = $("#leadWhatsApp");
+  let project = "";
+  let pendingLead;
+
+  function clearDraft() {
+    draftPanel.hidden = true;
+    telegram.removeAttribute("href");
+    whatsapp.removeAttribute("href");
+    pendingLead = undefined;
+    status.textContent = "";
+    message.setCustomValidity("");
+  }
+
+  function updateService() {
+    const isRepair = service.value === "Доработка сайта";
+    $("#leadSiteField").hidden = !isRepair;
+    site.disabled = !isRepair;
+    $("#leadMessageLabel").textContent = isRepair ? "Что сейчас мешает?" : "Коротко о задаче";
+    message.placeholder = isRepair ? "Например: на телефоне не видно кнопку заявки." : "Например: лендинг для услуг и заявки в Telegram.";
+  }
+
+  function setProject(value) {
+    project = value;
+    reference.hidden = !project;
+    referenceText.textContent = project ? `Пример сайта: ${project}` : "";
+    clearDraft();
+  }
+
+  $$("[data-lead-service]").forEach((link) => link.addEventListener("click", (event) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    service.value = link.dataset.leadService;
+    setProject(link.dataset.leadProject || "");
+    updateService();
+    $("#leadName").focus({ preventScroll: true });
+  }));
+  $("#leadClearReference").addEventListener("click", () => {
+    setProject("");
+    service.focus();
+  });
+  form.addEventListener("input", clearDraft);
+  service.addEventListener("change", () => {
+    if (service.value === "Доработка сайта") setProject("");
+    updateService();
+  });
+  updateService();
+
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
+    message.setCustomValidity("");
     if (!form.checkValidity()) { form.reportValidity(); return; }
-    const data = Object.fromEntries(new FormData(form).entries()); const message = encodeURIComponent(buildLeadMessage(data));
-    // noinspection SpellCheckingInspection
-    const url = selectedChannel === "whatsapp" ? `https://wa.me/${contactConfig.whatsappPhone}?text=${message}` : `https://t.me/${contactConfig.telegramUsername}?text=${message}`;
-    void sendLead(data);
-    // noinspection SpellCheckingInspection
-    window.open(url, "_blank", "noopener");
-    status.textContent = `${data.name}, заявка подготовлена. Отправьте ее в открывшемся мессенджере.`; showToast("Заявка подготовлена"); form.reset();
+    const data = Object.fromEntries(new FormData(form));
+    const details = [
+      project && `Пример сайта: ${project}`,
+      data.site && `Действующий сайт: ${data.site.trim()}`,
+      data.message.trim()
+    ].filter(Boolean).join("\n");
+    if (details.length > 1500) {
+      message.setCustomValidity("Сократите описание, чтобы заявка поместилась целиком.");
+      message.reportValidity();
+      return;
+    }
+    const { name, phone, service: task, budget } = data;
+    pendingLead = { name: name.trim(), phone: phone.trim(), service: task, budget, message: details };
+    draft.value = buildLeadMessage(pendingLead);
+    const encoded = encodeURIComponent(draft.value);
+    telegram.href = `https://t.me/${contactConfig.telegramUsername}?text=${encoded}`;
+    whatsapp.href = `https://wa.me/${contactConfig.whatsappPhone}?text=${encoded}`;
+    draftPanel.hidden = false;
+    draft.focus();
+    status.textContent = "Черновик готов. Проверьте текст заявки.";
+  });
+
+  [telegram, whatsapp].forEach((link) => link.addEventListener("click", () => {
+    if (pendingLead) {
+      void sendLead(pendingLead);
+      pendingLead = undefined;
+    }
+  }));
+  $("#leadCopyDraft").addEventListener("click", async () => {
+    try {
+      if (await copyText(draft.value)) {
+        status.textContent = "Черновик скопирован.";
+        return;
+      }
+    } catch { /* Select the draft for manual copying. */ }
+    draft.select();
+    status.textContent = "Текст выделен. Скопируйте его вручную.";
   });
 }
 
@@ -89,7 +189,7 @@ function setPresence(online, typing = false) { const presence = $("#chatPresence
 
 async function loadMessages() { const response = await fetch(`/api/messages?room=${encodeURIComponent(sessionId)}`).catch(() => null); if (response?.ok) { messages = await response.json(); localStorage.setItem("web-master-chat-cache", JSON.stringify(messages.slice(-80))); } else { messages = JSON.parse(localStorage.getItem("web-master-chat-cache") || "[]"); } renderMessages(); }
 function connectChat() { if (!window.io) return; socket = window.io({ transports: ["websocket", "polling"] }); socket.on("connect", () => { socket.emit("join", { room: sessionId, name: "Гость" }); setPresence(true); }); socket.on("presence", ({ online }) => setPresence(online)); socket.on("typing", ({ active }) => setPresence(true, active)); socket.on("message", (message) => addMessage(message)); socket.on("connect_error", () => setPresence(false)); }
-function openChat(event) { const unreadBadge = $("#chatUnread"); const chatWidget = $("#chatWidget"); const chatFab = $("#chatFab"); const chatInput = $("#chatInput"); const trigger = event?.currentTarget; chatTrigger = trigger instanceof HTMLElement ? trigger : document.activeElement instanceof HTMLElement ? document.activeElement : null; chatOpen = true; unread = 0; unreadBadge.hidden = true; chatWidget.classList.add("is-open"); chatWidget.setAttribute("aria-hidden", "false"); chatFab.classList.add("is-hidden"); document.body.classList.add("chat-open"); renderMessages(); setTimeout(() => chatInput.focus(), 250); }
+function openChat(event) { const unreadBadge = $("#chatUnread"); const chatWidget = $("#chatWidget"); const chatFab = $("#chatFab"); const trigger = event?.currentTarget; chatTrigger = trigger instanceof HTMLElement ? trigger : document.activeElement instanceof HTMLElement ? document.activeElement : null; chatOpen = true; unread = 0; unreadBadge.hidden = true; chatWidget.classList.add("is-open"); chatWidget.setAttribute("aria-hidden", "false"); chatFab.classList.add("is-hidden"); document.body.classList.add("chat-open"); if (!isStaticLanding) renderMessages(); setTimeout(() => { if (chatOpen) $(isStaticLanding ? "#chatFallback a" : "#chatInput").focus(); }, 250); }
 function closeChat() { const chatWidget = $("#chatWidget"); const chatFab = $("#chatFab"); chatOpen = false; chatWidget.classList.remove("is-open"); chatWidget.setAttribute("aria-hidden", "true"); chatFab.classList.remove("is-hidden"); document.body.classList.remove("chat-open"); if (chatTrigger instanceof HTMLElement) chatTrigger.focus(); }
 function setupChat() {
   const chatClose = $("#chatClose");
@@ -101,6 +201,14 @@ function setupChat() {
   const chatFile = $("#chatFile");
   const chatForm = $("#chatForm");
   $$('[data-open-chat]').forEach((button) => button.addEventListener("click", openChat)); chatClose.addEventListener("click", closeChat);
+  if (isStaticLanding) {
+    for (const control of [chatSearchToggle, chatForm, $("#quickReplies"), $("#chatMessages")]) control.hidden = true;
+    setText("#chatPresence", "Связь через мессенджеры");
+    setHref("#chatFallbackTelegram", $("#telegramLink").href);
+    setHref("#chatFallbackWhatsApp", $("#whatsappLink").href);
+    $("#chatFallback").hidden = false;
+    return;
+  }
   chatSearchToggle.addEventListener("click", () => { chatSearch.classList.toggle("is-visible"); if (chatSearch.classList.contains("is-visible")) messageSearch.focus(); });
   messageSearch.addEventListener("input", renderMessages); clearSearch.addEventListener("click", () => { messageSearch.value = ""; renderMessages(); });
   $$("#quickReplies button").forEach((button) => button.addEventListener("click", () => { input.value = button.textContent; input.focus(); }));
@@ -203,8 +311,19 @@ function setupSignalField() {
 }
 
 function setupMotion() {
-  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); } }), { threshold: .14 }); $$(".reveal").forEach((element) => { element.style.setProperty("--delay", `${element.dataset.delay || 0}ms`); observer.observe(element); });
-  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) $$("[data-tilt]").forEach((card) => { card.addEventListener("pointermove", (event) => { const box = card.getBoundingClientRect(); card.style.transform = `perspective(900px) rotateX(${((event.clientY - box.top) / box.height - .5) * -2}deg) rotateY(${((event.clientX - box.left) / box.width - .5) * 2}deg) translateY(-2px)`; }); card.addEventListener("pointerleave", () => { card.style.transform = ""; }); });
+  if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    }
+  }, { rootMargin: "0px 0px -56px" });
+  for (const element of $$(".reveal")) {
+    element.style.setProperty("--delay", `${element.dataset.delay || 0}ms`);
+    observer.observe(element);
+  }
+  document.body.classList.add("motion-ready");
 }
 function setupNavigation() {
   const header = $(".site-header");
@@ -224,7 +343,7 @@ function setupNavigation() {
     links.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === current));
   }, { passive: true });
 
-  back.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  back.addEventListener("click", () => window.scrollTo({ top: 0 }));
   menuToggle.addEventListener("click", (event) => {
     const opened = menu.classList.toggle("open");
     event.currentTarget.setAttribute("aria-expanded", opened);

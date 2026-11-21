@@ -14,11 +14,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/style.css?v=16">
   <!--suppress HtmlUnknownTarget, JSUnresolvedLibraryURL -->
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="js/socket.io.min.js" defer></script>
-  <script src="js/main.js?v=11" defer></script>
+  <script src="js/main.js?v=18" defer></script>
 </head>
 <body data-theme="larper">
   <canvas class="signal-field" data-signal-field aria-hidden="true"></canvas>
@@ -109,7 +109,7 @@
         </div>
         <div class="project-list">
           <article class="project-card project-steam reveal" data-tilt>
-            <div class="project-card-copy"><p class="project-kicker">Концепт интерфейса</p><h3>Steam 2.0</h3><p>Магазин, библиотека, новости и сообщество в едином игровом интерфейсе.</p><a class="project-link" href="https://imozzuhin88-star.github.io/stems-suyt/" target="_blank" rel="noopener">Открыть проект <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></div>
+            <div class="project-card-copy"><p class="project-kicker">Концепт интерфейса</p><h3>Steam 2.0</h3><p>Магазин, библиотека, новости и сообщество в едином игровом интерфейсе.</p><div class="project-card-actions"><a class="button button-primary" href="#steam-case">Разобрать проект</a><a class="project-link" href="https://imozzuhin88-star.github.io/stems-suyt/" target="_blank" rel="noopener">Открыть проект <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></div></div>
             <div class="project-art steam-art" aria-hidden="true"><span>LIBRARY</span><strong>PLAY<br>MORE</strong><i data-lucide="gamepad-2"></i></div>
           </article>
           <article class="project-card project-build reveal" data-delay="100" data-tilt>
@@ -117,6 +117,33 @@
             <div class="project-art build-art" aria-hidden="true"><span>01—04</span><strong>СТРОИМ<br>ПО ПЛАНУ</strong><i data-lucide="ruler"></i></div>
           </article>
         </div>
+        <details class="project-case" id="steam-case">
+          <summary>Как устроен Steam 2.0</summary>
+          <div class="case-content">
+            <fieldset class="case-views">
+              <legend>Посмотреть первый экран</legend>
+              <div class="case-options">
+                <label><input type="radio" name="case-view" value="desktop" checked> Компьютер</label>
+                <label><input type="radio" name="case-view" value="mobile"> Телефон</label>
+              </div>
+              <div class="case-images">
+                <img class="case-desktop" src="assets/steam-desktop.webp" width="1280" height="800" loading="lazy" alt="Главная страница Steam 2.0 на компьютере">
+                <img class="case-mobile" src="assets/steam-mobile.webp" width="390" height="780" loading="lazy" alt="Главная страница Steam 2.0 на телефоне">
+              </div>
+              <a class="project-link case-zoom case-zoom-desktop" href="assets/steam-desktop.webp" target="_blank" rel="noopener" aria-label="Открыть снимок экрана компьютера в полном размере">Открыть крупнее ↗</a>
+              <a class="project-link case-zoom case-zoom-mobile" href="assets/steam-mobile.webp" target="_blank" rel="noopener" aria-label="Открыть снимок экрана телефона в полном размере">Открыть крупнее ↗</a>
+            </fieldset>
+            <div class="case-notes">
+              <h3>Что может сделать посетитель</h3>
+              <dl>
+                <dt>Найти игру</dt><dd>С главной можно перейти в магазин и посмотреть подборки.</dd>
+                <dt>Вернуться к своей библиотеке</dt><dd>Библиотека вынесена в меню, чтобы её было легко найти.</dd>
+                <dt>Следить за новостями</dt><dd>На главной видны обновления, а в меню есть отдельный раздел сообщества.</dd>
+              </dl>
+              <a class="button button-primary" href="#request" data-lead-service="Сайт под ключ" data-lead-project="Steam 2.0">Хочу похожий сайт</a>
+            </div>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -135,24 +162,31 @@
       <div class="container">
         <div class="section-head reveal"><p class="eyebrow"><span></span>Стоимость</p><div><h2 id="pricesTitle">Понятная стоимость до начала работы.</h2><p>Сначала фиксируем объем, результат и срок. Финальная стоимость зависит от задачи.</p></div></div>
         <div class="price-grid">
-          <article class="price-card reveal" data-tilt><p class="price-label">Точечная задача</p><h3>Доработка</h3><p>Один блок, форма или конкретное исправление.</p><div class="price"><small>от</small> <span id="priceFix">1 500</span> <b>Р</b></div><ul><li>Разбор задачи</li><li>Оценка срока</li><li>Одна доработка</li></ul><a class="price-link" href="#request">Оставить заявку <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
-          <article class="price-card featured reveal" data-delay="80" data-tilt><p class="popular-badge">Основной формат</p><p class="price-label">Одностраничный сайт</p><h3>Лендинг</h3><p>Для одной услуги, продукта или рекламной кампании.</p><div class="price"><small>от</small> <span id="priceLanding">7 900</span> <b>Р</b></div><ul><li>Структура и дизайн</li><li>Адаптивная верстка</li><li>Форма заявки</li></ul><a class="price-link" href="#request">Выбрать формат <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
-          <article class="price-card reveal" data-delay="160" data-tilt><p class="price-label">Расширенный проект</p><h3>Под ключ</h3><p>Когда нужен цельный сайт с продуманной подачей.</p><div class="price"><small>от</small> <span id="priceTurnkey">15 900</span> <b>Р</b></div><ul><li>Индивидуальная структура</li><li>Контакты и оплата</li><li>Поддержка после запуска</li></ul><a class="price-link" href="#request">Обсудить проект <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
+          <article class="price-card reveal" data-tilt><p class="price-label">Точечная задача</p><h3>Доработка</h3><p>Один блок, форма или конкретное исправление.</p><div class="price"><small>от</small> <span id="priceFix">1 500</span> <b>Р</b></div><ul><li>Разбор задачи</li><li>Оценка срока</li><li>Одна доработка</li></ul><a class="price-link" href="#request" data-lead-service="Доработка сайта">Оставить заявку <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
+          <article class="price-card featured reveal" data-delay="80" data-tilt><p class="popular-badge">Основной формат</p><p class="price-label">Одностраничный сайт</p><h3>Лендинг</h3><p>Для одной услуги, продукта или рекламной кампании.</p><div class="price"><small>от</small> <span id="priceLanding">7 900</span> <b>Р</b></div><ul><li>Структура и дизайн</li><li>Адаптивная верстка</li><li>Форма заявки</li></ul><a class="price-link" href="#request" data-lead-service="Лендинг">Выбрать формат <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
+          <article class="price-card reveal" data-delay="160" data-tilt><p class="price-label">Расширенный проект</p><h3>Под ключ</h3><p>Когда нужен цельный сайт с продуманной подачей.</p><div class="price"><small>от</small> <span id="priceTurnkey">15 900</span> <b>Р</b></div><ul><li>Индивидуальная структура</li><li>Контакты и оплата</li><li>Поддержка после запуска</li></ul><a class="price-link" href="#request" data-lead-service="Сайт под ключ">Обсудить проект <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></article>
         </div>
       </div>
     </section>
 
     <section class="section request-section" id="request" aria-labelledby="requestTitle">
       <div class="container request-layout">
-        <div class="request-copy reveal"><p class="eyebrow"><span></span>Обсудим задачу</p><h2 id="requestTitle">Расскажите, что нужно сделать.</h2><p>Заполните форму - откроется выбранный мессенджер с готовой заявкой. Или напишите в чат на сайте.</p><div class="request-points"><span><i data-lucide="check" aria-hidden="true"></i>Оценка объема и срока</span><span><i data-lucide="check" aria-hidden="true"></i>Без обязательств</span></div></div>
+        <div class="request-copy reveal"><p class="eyebrow"><span></span>Обсудим задачу</p><h2 id="requestTitle">Расскажите, что нужно сделать.</h2><p>Соберите черновик заявки, затем откройте его в Telegram или WhatsApp.</p><div class="request-points"><span><i data-lucide="check" aria-hidden="true"></i>Оценка объема и срока</span><span><i data-lucide="check" aria-hidden="true"></i>Без обязательств</span></div></div>
         <div class="form-panel glass-panel reveal" data-delay="100">
           <form id="leadForm" novalidate>
-            <div class="form-row"><label for="leadName">Имя<input id="leadName" type="text" name="name" placeholder="Иван" autocomplete="name" required></label><label for="leadPhone">Телефон<input id="leadPhone" type="tel" name="phone" placeholder="+7 921 656-67-16" autocomplete="tel" required></label></div>
+            <div id="leadReference" class="lead-reference" hidden><span id="leadReferenceText"></span><button class="text-button" id="leadClearReference" type="button">Убрать пример</button></div>
+            <div class="form-row"><label for="leadName">Имя<input id="leadName" type="text" name="name" placeholder="Иван" autocomplete="name" minlength="2" maxlength="80" required></label><label for="leadPhone">Телефон<input id="leadPhone" type="tel" name="phone" placeholder="+7 921 656-67-16" autocomplete="tel" minlength="5" maxlength="32" required></label></div>
             <div class="form-row"><label for="leadService">Задача<select id="leadService" name="service"><option>Лендинг</option><option>Сайт-визитка</option><option>Доработка сайта</option><option>Форма заявки</option><option>Сайт под ключ</option></select></label><label for="leadBudget">Бюджет<select id="leadBudget" name="budget"><option>Нужна оценка</option><option>До 10 000 Р</option><option>10 000-30 000 Р</option><option>От 30 000 Р</option></select></label></div>
-            <label for="leadMessage">Коротко о задаче<textarea id="leadMessage" name="message" placeholder="Например: лендинг для услуг, 5-6 блоков и заявки в Telegram."></textarea></label>
-            <!--suppress SpellCheckingInspection -->
-            <div class="messenger-actions"><button class="button button-telegram" type="submit" data-channel="telegram"><i data-lucide="send" aria-hidden="true"></i>Telegram</button><button class="button button-whatsapp" type="submit" data-channel="whatsapp"><i data-lucide="message-circle" aria-hidden="true"></i>WhatsApp</button></div>
-            <p class="form-hint">Нажатие откроет мессенджер с подготовленной заявкой.</p><div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+            <label for="leadSite" id="leadSiteField" hidden>Ссылка на действующий сайт<input id="leadSite" type="url" name="site" maxlength="300" placeholder="https://..." disabled></label>
+            <label for="leadMessage"><span id="leadMessageLabel">Коротко о задаче</span><textarea id="leadMessage" name="message" maxlength="1500" placeholder="Например: лендинг для услуг и заявки в Telegram."></textarea></label>
+            <button class="button button-primary" type="submit">Подготовить заявку</button>
+            <div class="lead-draft" id="leadDraftPanel" hidden>
+              <label for="leadDraft">Черновик заявки<textarea id="leadDraft" rows="7" readonly></textarea></label>
+              <div class="messenger-actions"><a class="button button-telegram" id="leadTelegram" target="_blank" rel="noopener noreferrer">Открыть Telegram</a><a class="button button-whatsapp" id="leadWhatsApp" target="_blank" rel="noopener noreferrer">Открыть WhatsApp</a></div>
+              <button class="text-button" id="leadCopyDraft" type="button">Скопировать текст</button>
+              <p class="form-hint">Проверьте черновик. Сообщение нужно отправить в мессенджере.</p>
+            </div>
+            <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
           </form>
         </div>
       </div>
@@ -177,6 +211,13 @@
   <div class="chat-widget" id="chatWidget" role="dialog" aria-modal="true" aria-label="Чат с исполнителем" aria-hidden="true">
     <div class="chat-header"><div class="chat-person"><span class="chat-avatar">W</span><span><strong>Web мастер</strong><small id="chatPresence">Проверяем связь...</small></span></div><div class="chat-header-actions"><button class="chat-action icon-button" id="chatSearchToggle" type="button" aria-label="Поиск в сообщениях"><i data-lucide="search" aria-hidden="true"></i></button><button class="chat-action icon-button" id="chatClose" type="button" aria-label="Закрыть чат"><i data-lucide="x" aria-hidden="true"></i></button></div></div>
     <div class="chat-search" id="chatSearch"><i data-lucide="search" aria-hidden="true"></i><input id="messageSearch" type="search" placeholder="Поиск по переписке" aria-label="Поиск по сообщениям"><button id="clearSearch" type="button" aria-label="Очистить поиск"><i data-lucide="x" aria-hidden="true"></i></button></div>
+    <div class="chat-fallback" id="chatFallback" hidden>
+      <p>Напишите Ивану в удобном мессенджере.</p>
+      <div class="messenger-actions">
+        <a class="button button-telegram" id="chatFallbackTelegram" target="_blank" rel="noopener">Telegram</a>
+        <a class="button button-whatsapp" id="chatFallbackWhatsApp" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </div>
     <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
     <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span>Исполнитель печатает...</div>
     <div class="quick-replies" id="quickReplies"><button type="button">Нужен лендинг</button><button type="button">Уточнить стоимость</button><button type="button">Есть вопрос</button></div>
