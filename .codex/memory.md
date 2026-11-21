@@ -28,7 +28,7 @@ Last reviewed: 2026-11-22
 - GitHub Pages is only a static preview, not the backend deployment target.
 - Owner authorized committing and publishing the current redesign to `main` on 2026-11-21. This static release uses CSS v16 and JS v18. On GitHub Pages the chat launcher offers Telegram and WhatsApp, and the browser does not post leads to an API.
 
-- Owner authorized committing, pushing to `main`, and publishing the approved animation preview on 2026-11-22. New public `js/portfolio-motion.js` and `css/portfolio-motion.css` provide tile entrance, miniature assembly, card tilt/glare, process line, and Steam desktop/mobile screenshot morphing. No pixel trail or replay controls. Motion defaults to the OS preference with an explicit remembered `web-master-motion` override. Static release assets: style CSS v17, main JS v19, portfolio motion CSS/JS v1. Backend behavior remains unchanged.
+- Owner authorized committing, pushing to `main`, and publishing the approved animation preview on 2026-11-22. New public `js/portfolio-motion.js` and `css/portfolio-motion.css` provide tile entrance, miniature assembly, card tilt/glare, process line, and Steam desktop/mobile screenshot morphing. No pixel trail or replay controls. Motion is visible on a first visit unless explicitly disabled in `web-master-motion`; reduced motion uses gentle opacity-only entrances. Early `js/startup.js` sets manual scroll restoration: plain URLs and #top start at the hero, explicit section links remain supported. Static release assets: style CSS v17, main JS v19, portfolio motion CSS v1 / JS v2, startup JS v1. Backend behavior remains unchanged.
 
 ## Memory Upkeep
 

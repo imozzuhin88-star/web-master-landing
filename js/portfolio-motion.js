@@ -17,7 +17,8 @@ stage.append(control);
 const enabled = control.querySelector('input');
 let preference;
 try { preference = localStorage.getItem('web-master-motion'); } catch {}
-enabled.checked = preference ? preference === 'on' : !reduced;
+// Keep the entrance visible on a first visit; reduced motion uses gentle fades.
+enabled.checked = preference !== 'off';
 enabled.addEventListener('change', () => {
   try { localStorage.setItem('web-master-motion', enabled.checked ? 'on' : 'off'); } catch {}
   updateStudy();
@@ -39,10 +40,12 @@ async function playAssembly() {
   stage.querySelectorAll('.motion-piece').forEach((element, index) => {
     element.style.animation = 'none';
     const order = Number(element.style.getPropertyValue('--i')) || index;
-    activeAnimations.push(element.animate([
+    activeAnimations.push(element.animate(reduced ? [
+      { opacity: 0 }, { opacity: 1 }
+    ] : [
       { opacity:0, transform:'translate3d(0,65px,-150px) rotateX(18deg) scale(.9)', filter:'blur(10px)' },
       { opacity:1, transform:'translate3d(0,0,0) rotateX(0deg) scale(1)', filter:'blur(0)' }
-    ], {duration:1100, delay:order*250, easing:'cubic-bezier(.16,1,.3,1)', fill:'both'}));
+    ], {duration:reduced ? 500 : 1100, delay:order*(reduced ? 100 : 250), easing:'cubic-bezier(.16,1,.3,1)', fill:'both'}));
   });
   await Promise.all(activeAnimations.map(animation => animation.finished.catch(() => {})));
   if (current !== generation) return;
@@ -117,12 +120,14 @@ addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(upd
       const x=Number(tile.dataset.x),y=Number(tile.dataset.y);
       const distance=Math.hypot((x-columns*.48)*.9,(y-rows*.38)*1.15);
       const delay=180+distance*95+((x*7+y*11)%5)*28;
-      animations.push(tile.animate([
+      animations.push(tile.animate(reduced ? [
+        { opacity: 1 }, { opacity: 0 }
+      ] : [
         {opacity:1,transform:'perspective(700px) translate3d(0,0,0) rotateX(0deg) scale(1.025)',offset:0,background:'#100d18'},
         {opacity:1,transform:'perspective(700px) translate3d(0,0,0) rotateX(0deg) scale(.94)',offset:.22,background:'#55336f'},
         {opacity:.65,transform:'perspective(700px) translate3d(0,-9px,20px) rotateX(24deg) scale(.65)',offset:.56,background:'#392347'},
         {opacity:0,transform:'perspective(700px) translate3d(0,-24px,70px) rotateX(65deg) scale(.12)',background:'#100d18'}
-      ],{duration:950,delay,easing:'cubic-bezier(.2,.65,.25,1)',fill:'both'}));
+      ],{duration:reduced ? 600 : 950,delay:reduced ? delay*.55 : delay,easing:'cubic-bezier(.2,.65,.25,1)',fill:'both'}));
     });
     await Promise.all(animations.map(a=>a.finished.catch(()=>{})));
     if(run!==sequence)return;
