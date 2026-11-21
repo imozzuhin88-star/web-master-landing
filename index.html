@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Web мастер разрабатывает лендинги и сайты-визитки для малого бизнеса: структура, дизайн, адаптивная верстка и заявки в мессенджеры.">
-  <meta name="theme-color" content="#0a1020">
+  <meta name="theme-color" content="#050505">
   <meta property="og:title" content="Web мастер - лендинги и сайты-визитки для бизнеса">
   <meta property="og:description" content="Понятный сайт для услуг и малого бизнеса: от структуры до заявок в мессенджеры.">
   <meta property="og:type" content="website">
@@ -13,14 +13,15 @@
   <title>Web мастер - лендинги и сайты-визитки для бизнеса</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=9">
   <!--suppress HtmlUnknownTarget, JSUnresolvedLibraryURL -->
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="js/socket.io.min.js" defer></script>
-  <script src="js/main.js?v=8" defer></script>
+  <script src="js/main.js?v=11" defer></script>
 </head>
-<body>
+<body data-theme="larper">
+  <canvas class="signal-field" data-signal-field aria-hidden="true"></canvas>
   <div class="page-loader" id="pageLoader" aria-label="Загрузка страницы">
     <div class="loader-mark">W</div>
   </div>
@@ -35,10 +36,14 @@
       </button>
       <nav class="site-nav" id="siteMenu" aria-label="Основная навигация">
         <a href="#services">Услуги</a>
+        <a href="#projects">Работы</a>
         <a href="#process">Процесс</a>
         <a href="#prices">Стоимость</a>
         <a href="#contacts">Контакты</a>
       </nav>
+      <button class="theme-toggle icon-button" type="button" data-theme-toggle aria-label="Изменить оформление" title="Изменить оформление">
+        <span>Тема</span>
+      </button>
       <button class="nav-chat" type="button" data-open-chat>
         <i data-lucide="message-circle" aria-hidden="true"></i><span>Написать</span>
       </button>
@@ -49,12 +54,13 @@
     <section class="hero section-dark" aria-labelledby="heroTitle">
       <div class="container hero-grid">
         <div class="hero-copy reveal">
-          <p class="eyebrow"><span></span>Лендинги и сайты-визитки для малого бизнеса</p>
-          <h1 id="heroTitle">Сайт, который <em>объясняет ценность</em> и приводит обращения</h1>
-          <p class="hero-text">Для услуг, экспертов и небольших команд. Структура, дизайн, разработка и заявки - в одном проекте.</p>
+          <p class="hero-command">Привет, я Иван. Веб-разработчик.</p>
+          <p class="eyebrow"><span></span>Дизайн / разработка / доработки</p>
+          <h1 id="heroTitle">Сайты<br>и <em>лендинги.</em></h1>
+          <p class="hero-text">Делаю сайты для бизнеса и личных проектов. Можно заказать новый сайт или доработать тот, который уже есть.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#request"><span>Обсудить задачу</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
-            <button class="button button-ghost" type="button" data-open-chat><i data-lucide="messages-square" aria-hidden="true"></i><span>Задать вопрос</span></button>
+            <button class="button button-primary" type="button" data-open-chat><span>Привет, Иван</span><i data-lucide="message-circle" aria-hidden="true"></i></button>
+            <a class="button button-ghost" href="#projects"><span>Посмотреть работы</span><i data-lucide="arrow-down-right" aria-hidden="true"></i></a>
           </div>
           <div class="hero-proof" aria-label="Что входит в работу">
             <div><i data-lucide="layout-template" aria-hidden="true"></i><span>Лендинг или сайт-визитка</span></div>
@@ -63,15 +69,12 @@
           </div>
         </div>
         <div class="hero-visual reveal" data-delay="120">
-          <div class="browser-card" data-tilt>
-            <div class="browser-bar"><span></span><span></span><span></span><div></div></div>
-            <div class="browser-preview">
-              <p>ВАШ БИЗНЕС</p><strong>Понятная подача услуги. Без лишних слов.</strong>
-              <div class="preview-lines"><span></span><span></span><span></span></div>
-              <div class="preview-button">Оставить заявку <i data-lucide="arrow-up-right" aria-hidden="true"></i></div>
-            </div>
+          <div class="hero-directory">
+            <p class="directory-heading"><span>web-master / проекты</span><i data-lucide="folder-open" aria-hidden="true"></i></p>
+            <a href="https://imozzuhin88-star.github.io/stems-suyt/" target="_blank" rel="noopener"><span class="directory-number">01</span><span><strong>Steam 2.0</strong><small>Игровой интерфейс</small></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+            <a href="https://imozzuhin88-star.github.io/stroidom-construction-landing/" target="_blank" rel="noopener"><span class="directory-number">02</span><span><strong>СтройДом</strong><small>Строительный лендинг</small></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+            <p class="directory-note">Есть своя идея? <a href="#request">Расскажите о ней <i data-lucide="arrow-right" aria-hidden="true"></i></a></p>
           </div>
-          <div class="floating-tag tag-project"><i data-lucide="sparkles" aria-hidden="true"></i>Дизайн под задачу</div>
         </div>
       </div>
     </section>
@@ -87,13 +90,32 @@
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow"><span></span>Возможности</p>
-          <div><h2 id="servicesTitle">Сайт, который помогает клиенту сделать выбор.</h2><p>Собираю только нужные блоки: чтобы показать услугу, снять вопросы и привести человека к заявке.</p></div>
+          <div><h2 id="servicesTitle">Здесь можно выбрать.</h2><p>Новый лендинг, сайт-визитка или доработка готового сайта.</p></div>
         </div>
         <div class="services-grid">
           <article class="service-card card-large reveal" data-tilt><div class="card-icon"><i data-lucide="layout-template" aria-hidden="true"></i></div><p class="card-number">01</p><h3>Лендинг</h3><p>Одна услуга, ясная подача и понятный путь к заявке.</p></article>
           <article class="service-card reveal" data-delay="80" data-tilt><div class="card-icon"><i data-lucide="briefcase-business" aria-hidden="true"></i></div><p class="card-number">02</p><h3>Сайт-визитка</h3><p>Услуги, преимущества, контакты и доверительная подача бизнеса.</p></article>
           <article class="service-card reveal" data-delay="160" data-tilt><div class="card-icon"><i data-lucide="wand-sparkles" aria-hidden="true"></i></div><p class="card-number">03</p><h3>Доработки</h3><p>Исправляю верстку, формы и мобильную версию действующего сайта.</p></article>
           <article class="service-card service-wide reveal" data-delay="120" data-tilt><div><div class="card-icon"><i data-lucide="send" aria-hidden="true"></i></div><p class="card-number">04</p><h3>Заявки и запуск</h3><p>Подключаю мессенджеры, контакты, оплату и готовлю сайт к публикации.</p></div><div class="service-orbit"><span>Telegram</span><span>WhatsApp</span><span>Оплата</span></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section portfolio-section" id="projects" aria-labelledby="projectsTitle">
+      <div class="container">
+        <div class="section-head portfolio-head reveal">
+          <p class="eyebrow"><span></span>Портфолио</p>
+          <div><h2 id="projectsTitle">Работы, которые можно открыть и посмотреть.</h2><p>Разные задачи, одна логика: понятная навигация, аккуратная визуальная система и сценарии, которые не теряют пользователя.</p></div>
+        </div>
+        <div class="project-list">
+          <article class="project-card project-steam reveal" data-tilt>
+            <div class="project-card-copy"><p class="project-kicker">Концепт интерфейса</p><h3>Steam 2.0</h3><p>Магазин, библиотека, новости и сообщество в едином игровом интерфейсе.</p><a class="project-link" href="https://imozzuhin88-star.github.io/stems-suyt/" target="_blank" rel="noopener">Открыть проект <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></div>
+            <div class="project-art steam-art" aria-hidden="true"><span>LIBRARY</span><strong>PLAY<br>MORE</strong><i data-lucide="gamepad-2"></i></div>
+          </article>
+          <article class="project-card project-build reveal" data-delay="100" data-tilt>
+            <div class="project-card-copy"><p class="project-kicker">Коммерческий лендинг</p><h3>СтройДом</h3><p>Сайт строительной компании: услуги, объекты, калькулятор и сценарий обращения.</p><a class="project-link" href="https://imozzuhin88-star.github.io/stroidom-construction-landing/" target="_blank" rel="noopener">Открыть проект <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></div>
+            <div class="project-art build-art" aria-hidden="true"><span>01—04</span><strong>СТРОИМ<br>ПО ПЛАНУ</strong><i data-lucide="ruler"></i></div>
+          </article>
         </div>
       </div>
     </section>
@@ -138,16 +160,17 @@
 
     <section class="section contacts-section" id="contacts" aria-labelledby="contactsTitle">
       <div class="container">
-        <div class="section-head reveal"><p class="eyebrow"><span></span>На связи</p><div><h2 id="contactsTitle">Контакты и оплата</h2><p>Выберите удобный способ связи. Реквизиты можно скопировать одним нажатием.</p></div></div>
+        <div class="section-head reveal"><p class="eyebrow"><span></span>На связи</p><div><h2 id="contactsTitle">Контакты для старта проекта.</h2><p>Выберите удобный способ связи, расскажите о задаче и получите первичную оценку.</p></div></div>
         <div class="contacts-grid">
           <article class="contact-card glass-panel reveal"><h3>Написать или позвонить</h3><div class="contact-list"><a id="phoneLink" href="tel:+79216566716"><i data-lucide="phone" aria-hidden="true"></i><span><small>Телефон</small><strong id="phoneText">+7 921 656-67-16</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="telegramLink" href="https://t.me/GG22870" target="_blank" rel="noopener"><i data-lucide="send" aria-hidden="true"></i><span><small>Telegram</small><strong id="telegramText">@GG22870</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="whatsappLink" href="https://wa.me/79216566716" target="_blank" rel="noopener"><i data-lucide="message-circle" aria-hidden="true"></i><span><small>WhatsApp</small><strong id="whatsappText">+7 921 656-67-16</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a><a id="emailLink" href="mailto:mozhzhukhin@gmail.com"><i data-lucide="mail" aria-hidden="true"></i><span><small>Почта</small><strong id="emailText">mozhzhukhin@gmail.com</strong></span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a></div><button class="wide-chat-button" type="button" data-open-chat><span><i data-lucide="messages-square" aria-hidden="true"></i>Чат с исполнителем</span><span class="online-dot"></span></button></article>
-          <article class="payment-card reveal" data-delay="100"><div class="payment-card-head"><div><p class="card-label">Оплата</p><h3>Перевод по реквизитам</h3></div><i data-lucide="credit-card" aria-hidden="true"></i></div><div class="bank-card"><div><span id="bankNameCard">Ваш банк</span><i data-lucide="wifi" aria-hidden="true"></i></div><strong id="cardNumberText">0000 0000 0000 0000</strong><div><span id="cardHolderText">Иван Иванов</span><span>МИР</span></div></div><div class="payment-info"><p>Получатель <strong id="paymentRecipientText">Иван Иванов</strong></p><p>Назначение <strong id="paymentPurposeText">Разработка сайта</strong></p></div><div class="payment-actions"><button class="button button-dark" type="button" data-copy="card"><i data-lucide="copy" aria-hidden="true"></i>Скопировать карту</button><button class="icon-button payment-copy" type="button" data-copy="details" aria-label="Скопировать все реквизиты"><i data-lucide="clipboard-copy" aria-hidden="true"></i></button></div><p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p></article>
+          <aside class="contact-note reveal" data-delay="100"><p class="project-kicker">Следующий шаг</p><h3>Сначала задача, затем точная смета.</h3><p>После короткого знакомства согласуем объём, срок и удобный порядок работы. Реквизиты для оплаты предоставляются только после согласования проекта.</p><a class="project-link" href="#request">Заполнить бриф <i data-lucide="arrow-down" aria-hidden="true"></i></a></aside>
         </div>
       </div>
     </section>
   </main>
 
   <footer><div class="container footer-inner"><a class="brand" href="#top"><span class="brand-mark">W</span><span>Web мастер</span></a><p>© <span id="currentYear">2026</span> Разработка сайтов. Все права защищены.</p><button class="footer-chat" type="button" data-open-chat>Написать в чат <i data-lucide="arrow-up-right" aria-hidden="true"></i></button></div></footer>
+  <div class="site-readout" aria-label="Статус сайта"><span><i></i> WEB-MASTER / СВЯЗЬ ОТКРЫТА</span><span>DESIGN + CODE</span><span class="site-readout-spacer"></span><span>RU / <span id="readoutYear">2026</span></span></div>
   <button class="back-to-top icon-button" id="backToTop" type="button" aria-label="Наверх"><i data-lucide="arrow-up" aria-hidden="true"></i></button>
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
@@ -159,6 +182,6 @@
     <div class="quick-replies" id="quickReplies"><button type="button">Нужен лендинг</button><button type="button">Уточнить стоимость</button><button type="button">Есть вопрос</button></div>
     <form class="chat-form" id="chatForm"><input class="file-input" id="chatFile" type="file" accept="image/*,.pdf,.doc,.docx,.txt"><label class="chat-action icon-button" for="chatFile" aria-label="Прикрепить фото или файл"><i data-lucide="paperclip" aria-hidden="true"></i></label><textarea id="chatInput" rows="1" maxlength="1000" placeholder="Сообщение..." aria-label="Текст сообщения"></textarea><button class="send-button" type="submit" aria-label="Отправить сообщение"><i data-lucide="arrow-up" aria-hidden="true"></i></button></form>
   </div>
-  <button class="chat-fab" id="chatFab" type="button" data-open-chat aria-label="Открыть чат"><i data-lucide="message-circle" aria-hidden="true"></i><span class="chat-unread" id="chatUnread" hidden>0</span></button>
+  <button class="chat-fab" id="chatFab" type="button" data-open-chat aria-label="Открыть чат"><span>Чат</span><span class="chat-unread" id="chatUnread" hidden>0</span></button>
 </body>
 </html>

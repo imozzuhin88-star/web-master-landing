@@ -111,6 +111,97 @@ function setupChat() {
   void loadMessages(); connectChat();
 }
 
+function setupTheme() {
+  const button = $("[data-theme-toggle]");
+  if (!button) return;
+  const themes = ["larper", "terminal", "paper"];
+  const labels = { larper: "сигнал", terminal: "терминал", paper: "свет" };
+  const colors = { larper: "#050505", terminal: "#050706", paper: "#f4f1eb" };
+  const savedTheme = localStorage.getItem("web-master-theme");
+
+  function applyTheme(theme) {
+    const activeTheme = themes.includes(theme) ? theme : "larper";
+    document.body.dataset.theme = activeTheme;
+    document.documentElement.style.colorScheme = activeTheme === "paper" ? "light" : "dark";
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", colors[activeTheme]);
+    button.setAttribute("aria-label", `Оформление: ${labels[activeTheme]}. Изменить`);
+    button.title = `Оформление: ${labels[activeTheme]}`;
+  }
+
+  applyTheme(savedTheme || document.body.dataset.theme);
+  button.addEventListener("click", () => {
+    const nextTheme = themes[(themes.indexOf(document.body.dataset.theme) + 1) % themes.length];
+    localStorage.setItem("web-master-theme", nextTheme);
+    applyTheme(nextTheme);
+  });
+}
+
+function setupSignalField() {
+  const canvas = $("[data-signal-field]");
+  if (!(canvas instanceof HTMLCanvasElement)) return;
+  const context = canvas.getContext("2d");
+  if (!context) return;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let frame;
+  let particles = [];
+
+  function palette() {
+    const styles = getComputedStyle(document.body);
+    return [styles.getPropertyValue("--studio-accent").trim(), styles.getPropertyValue("--studio-cyan").trim(), styles.getPropertyValue("--studio-lime").trim()];
+  }
+
+  function resize() {
+    const scale = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.ceil(window.innerWidth * scale);
+    canvas.height = Math.ceil(window.innerHeight * scale);
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
+    context.setTransform(scale, 0, 0, scale, 0, 0);
+    const count = Math.max(28, Math.min(78, Math.round(window.innerWidth / 22)));
+    particles = Array.from({ length: count }, (_, index) => ({
+      x: (index * 97) % window.innerWidth,
+      y: (index * 53) % window.innerHeight,
+      size: index % 11 === 0 ? 3 : 1,
+      speed: 0.05 + (index % 5) * 0.022,
+      shade: index % 3
+    }));
+  }
+
+  function draw(animate = false) {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const colors = palette();
+    context.clearRect(0, 0, width, height);
+    context.globalAlpha = document.body.dataset.theme === "paper" ? 0.22 : 0.28;
+    context.fillStyle = colors[0];
+    for (let x = 24; x < width; x += 48) {
+      for (let y = 20; y < height; y += 48) {
+        context.fillRect(x - 3, y, 7, 1);
+        context.fillRect(x, y - 3, 1, 7);
+      }
+    }
+    context.globalAlpha = 1;
+  }
+
+  function loop() {
+    draw(true);
+    frame = requestAnimationFrame(loop);
+  }
+
+  function updateMotion() {
+    cancelAnimationFrame(frame);
+    draw(false);
+    // The reference grid is stationary: no continuous redraw is needed.
+  }
+
+  resize();
+  updateMotion();
+  window.addEventListener("resize", () => { resize(); updateMotion(); }, { passive: true });
+  reducedMotion.addEventListener?.("change", updateMotion);
+  $("[data-theme-toggle]")?.addEventListener("click", () => requestAnimationFrame(() => draw(false)));
+}
+
 function setupMotion() {
   const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); } }), { threshold: .14 }); $$(".reveal").forEach((element) => { element.style.setProperty("--delay", `${element.dataset.delay || 0}ms`); observer.observe(element); });
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) $$("[data-tilt]").forEach((card) => { card.addEventListener("pointermove", (event) => { const box = card.getBoundingClientRect(); card.style.transform = `perspective(900px) rotateX(${((event.clientY - box.top) / box.height - .5) * -2}deg) rotateY(${((event.clientX - box.left) / box.width - .5) * 2}deg) translateY(-2px)`; }); card.addEventListener("pointerleave", () => { card.style.transform = ""; }); });
@@ -152,4 +243,4 @@ function setupNavigation() {
   if (initialAnchor) requestAnimationFrame(() => initialAnchor.scrollIntoView({ block: "start" }));
 }
 
-window.addEventListener("load", () => { initializeContacts(); setupLeadForm(); setupCopyButtons(); setupChat(); setupMotion(); setupNavigation(); setText("#currentYear", new Date().getFullYear()); window.lucide?.createIcons(); setTimeout(() => $("#pageLoader").classList.add("is-hidden"), 280); });
+window.addEventListener("load", () => { initializeContacts(); setupLeadForm(); setupCopyButtons(); setupChat(); setupTheme(); setupSignalField(); setupMotion(); setupNavigation(); setText("#currentYear", new Date().getFullYear()); setText("#readoutYear", new Date().getFullYear()); window.lucide?.createIcons(); setTimeout(() => $("#pageLoader").classList.add("is-hidden"), 280); });
