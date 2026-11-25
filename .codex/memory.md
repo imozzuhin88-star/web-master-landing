@@ -1,6 +1,6 @@
 # Project Memory
 
-Last reviewed: 2026-11-22
+Last reviewed: 2026-11-25
 
 ## Product
 
@@ -29,6 +29,8 @@ Last reviewed: 2026-11-22
 - Owner authorized committing and publishing the current redesign to `main` on 2026-11-21. This static release uses CSS v16 and JS v18. On GitHub Pages the chat launcher offers Telegram and WhatsApp, and the browser does not post leads to an API.
 
 - Owner authorized committing, pushing to `main`, and publishing the approved animation preview on 2026-11-22. New public `js/portfolio-motion.js` and `css/portfolio-motion.css` provide tile entrance, miniature assembly, card tilt/glare, process line, and Steam desktop/mobile screenshot morphing. No pixel trail or replay controls. The explicit site motion setting (`data-motion`, persisted as `web-master-motion`) controls the full approved effects, overriding legacy OS-only gates when on; off reveals all content without movement. Larper background drift is driven by scroll variables rather than CSS animation-timeline, and the trust-strip stars rotate with scrolling. Early `js/startup.js` sets manual scroll restoration: plain URLs and #top start at the hero, explicit section links remain supported. Static release assets: style CSS v17, main JS v19, portfolio motion CSS/JS v3, startup JS v1. Backend behavior remains unchanged.
+
+- Current release (owner approved on 2026-11-25): violet/lavender concentric-circle entrance replaces tile assembly via `js/circle-intro.js` and `css/circle-intro.css` v1. `landing-entry-complete` plus `data-entry-complete` starts the miniature even after early skip. Skip/Escape, background-tab pause, mask fallback, bounded load wait, and keyboard/scroll restoration are included. The owner explicitly removed the motion switch before publication: no `web-master-motion` reads/writes remain, so stale off preferences cannot disable effects. Existing background drift, stars, card depth and device previews stay enabled. Portfolio motion CSS/JS v4; startup JS v1. The separate archive concept is not included.
 
 ## Memory Upkeep
 

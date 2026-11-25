@@ -16,14 +16,36 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="js/startup.js?v=1"></script>
   <link rel="stylesheet" href="css/style.css?v=17">
+  <link rel="stylesheet" href="css/circle-intro.css?v=1">
+  <script src="js/circle-intro.js?v=1" defer></script>
   <!--suppress HtmlUnknownTarget, JSUnresolvedLibraryURL -->
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="js/socket.io.min.js" defer></script>
   <script src="js/main.js?v=19" defer></script>
-  <link rel="stylesheet" href="css/portfolio-motion.css?v=3">
-  <script src="js/portfolio-motion.js?v=3" defer></script>
+  <link rel="stylesheet" href="css/portfolio-motion.css?v=4">
+  <script src="js/portfolio-motion.js?v=4" defer></script>
 </head>
 <body data-theme="larper">
+  <div id="circleIntro" aria-label="Вступление Web мастер" data-phase="waiting" hidden>
+    <span class="intro-wordmark">W / WEB MASTER</span>
+    <button class="intro-skip" type="button">Пропустить</button>
+    <svg class="intro-art" viewBox="0 0 1000 1000" aria-hidden="true">
+      <circle class="intro-ring" cx="500" cy="500" r="0"/>
+      <circle class="intro-ring" cx="500" cy="500" r="0"/>
+      <circle class="intro-ring" cx="500" cy="500" r="0"/>
+      <circle class="intro-ring" cx="500" cy="500" r="0"/>
+      <circle class="intro-ring" cx="500" cy="500" r="0"/>
+      <circle class="intro-ring" cx="500" cy="500" r="0"/>
+      <circle class="intro-dot" cx="500" cy="500" r="2.1"/>
+      <circle class="intro-dot" cx="500" cy="500" r="2.1"/>
+      <circle class="intro-dot" cx="500" cy="500" r="2.1"/>
+      <circle class="intro-dot" cx="500" cy="500" r="2.1"/>
+      <circle class="intro-dot" cx="500" cy="500" r="2.1"/>
+      <circle class="intro-dot" cx="500" cy="500" r="2.1"/>
+    </svg>
+    <div class="intro-core"><strong>WEB MASTER</strong><small>ДИЗАЙН / РАЗРАБОТКА</small></div>
+    <span class="intro-caption">САЙТЫ. ИДЕИ. ДВИЖЕНИЕ.</span>
+  </div>
   <canvas class="signal-field" data-signal-field aria-hidden="true"></canvas>
   <div class="page-loader" id="pageLoader" aria-label="Загрузка страницы">
     <div class="loader-mark">W</div>

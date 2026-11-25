@@ -9,24 +9,13 @@ document.querySelector('.hero-visual').prepend(stage);
 const status = stage.querySelector('.motion-caption > span');
 
 
-const control = document.createElement('label');
-control.className = 'motion-preference';
-control.innerHTML = '<input type="checkbox"> Анимация';
-stage.append(control);
-const enabled = control.querySelector('input');
-let preference;
-try { preference = localStorage.getItem('web-master-motion'); } catch {}
-// This explicit site setting controls every approved effect consistently.
-enabled.checked = preference !== 'off';
-
-function applyMotionPreference() {
-  document.body.dataset.motion = enabled.checked ? 'on' : 'off';
-  document.body.classList.add('motion-ready');
-}
-applyMotionPreference();
+// The owner removed the motion switch. Old saved preferences must not disable
+// effects when there is no longer a visible control to enable them again.
+document.body.dataset.motion = 'on';
+document.body.classList.add('motion-ready');
 
 // The original reveals were gated by a separate OS-only setting. Use the site
-// preference here as well, including when the browser reports reduced motion.
+// presentation here as well, including when the browser reports reduced motion.
 if ('IntersectionObserver' in window) {
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -39,22 +28,12 @@ if ('IntersectionObserver' in window) {
 } else {
   document.querySelectorAll('.reveal').forEach(element => element.classList.add('is-visible'));
 }
-enabled.addEventListener('change', () => {
-  try { localStorage.setItem('web-master-motion', enabled.checked ? 'on' : 'off'); } catch {}
-  applyMotionPreference();
-  updateStudy();
-});
 let activeAnimations = [];
 let generation = 0;
 async function playAssembly() {
   const current = ++generation;
   activeAnimations.forEach(animation => animation.cancel());
   activeAnimations = [];
-  if (!enabled.checked) {
-    stage.dataset.assemblyState = 'skipped';
-    status.textContent = 'Структура. Дизайн. Запуск.';
-    return;
-  }
   status.textContent = 'Структура. Дизайн. Запуск.';
   stage.dataset.assemblyState = 'running';
   stage.dataset.assemblyRun = String(current);
@@ -71,7 +50,6 @@ async function playAssembly() {
   stage.dataset.assemblyState = 'finished';
   status.textContent = 'Структура. Дизайн. Запуск.';
 }
-enabled.addEventListener('change', playAssembly);
 const miniCta = stage.querySelector('.motion-mini-button');
 const realLink = document.createElement('a');
 realLink.className = miniCta.className;
@@ -79,8 +57,9 @@ realLink.style.cssText = miniCta.style.cssText;
 realLink.href = '#request';
 realLink.textContent = 'Обсудить свой сайт';
 miniCta.replaceWith(realLink);
-// Start the miniature after the page entrance, so it is not hidden behind tiles.
-document.addEventListener('page-assembly-complete', playAssembly, { once: true });
+// Start the miniature after the circle entrance, including an early skip.
+document.addEventListener('landing-entry-complete', playAssembly, { once: true });
+if (document.documentElement.dataset.entryComplete === 'true') playAssembly();
 
 const showcase = document.createElement('div');showcase.className='motion-project-showcase';
 showcase.innerHTML='<div class="motion-project-frame"><img src="assets/steam-desktop.webp" width="1280" height="800" alt="Интерфейс Steam 2.0"></div><div class="motion-project-copy"><p class="eyebrow">Проект в движении</p><h3>Один экран.<br>Целая история.</h3><p>При прокрутке превью раскрывается, а детали появляются по очереди.</p><span class="motion-feature">Магазин и подборки игр</span><span class="motion-feature">Библиотека под рукой</span><span class="motion-feature">Компьютер и телефон</span></div>';
@@ -93,111 +72,25 @@ function updateStudy() {
   const rect = showcase.getBoundingClientRect();
   const progress = Math.max(0, Math.min(1, (height * .88 - rect.top) / (height * .65)));
   const pageProgress = Math.max(0, Math.min(1, scrollY / Math.max(1, document.documentElement.scrollHeight - height)));
-  document.body.style.setProperty('--ambient-x', enabled.checked ? (Math.sin(pageProgress * Math.PI * 2) * 11).toFixed(2) + '%' : '0%');
-  document.body.style.setProperty('--ambient-y', enabled.checked ? (Math.cos(pageProgress * Math.PI * 2) * 8).toFixed(2) + '%' : '0%');
-  document.body.style.setProperty('--strip-turn', enabled.checked ? (scrollY * .07).toFixed(1) + 'deg' : '0deg');
+  document.body.style.setProperty('--ambient-x', (Math.sin(pageProgress * Math.PI * 2) * 11).toFixed(2) + '%');
+  document.body.style.setProperty('--ambient-y', (Math.cos(pageProgress * Math.PI * 2) * 8).toFixed(2) + '%');
+  document.body.style.setProperty('--strip-turn', (scrollY * .07).toFixed(1) + 'deg');
   showcase.querySelectorAll('.motion-feature').forEach((element, index) => {
-    element.classList.toggle('active', !enabled.checked || progress > .2 + index * .23);
+    element.classList.toggle('active', progress > .2 + index * .23);
   });
   const pathRect = pathList.getBoundingClientRect();
   const pathProgress = Math.max(0, Math.min(1, (height * .72 - pathRect.top) / pathRect.height));
-  pathList.style.setProperty('--path-progress', enabled.checked ? pathProgress : 1);
+  pathList.style.setProperty('--path-progress', pathProgress);
   pathList.querySelectorAll('li').forEach(element => {
-    element.classList.toggle('path-active', !enabled.checked || element.getBoundingClientRect().top < height * .72);
+    element.classList.toggle('path-active', element.getBoundingClientRect().top < height * .72);
   });
 }
 addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateStudy);}},{passive:true});addEventListener('resize',updateStudy);updateStudy();
 
 
-(() => {
-  const root = document.createElement('div');
-  root.className = 'page-assembly';
-  root.setAttribute('aria-hidden','true');
-  document.body.append(root);
-  let animations = [];
-  let sequence = 0;
-  let autoplayDone = false;
-  function stop() {
-    sequence++;
-    animations.forEach(a=>a.cancel());
-    animations=[];
-    root.replaceChildren();
-    root.hidden=true;
-    document.body.classList.remove('page-is-assembling');
-  }
-  async function assemble() {
-    stop();
-    const run = sequence;
-    const setting = document.querySelector('.motion-preference input');
-    if (setting && !setting.checked) {
-      root.hidden = true;
-      root.dataset.state = 'skipped';
-      document.dispatchEvent(new Event('page-assembly-complete'));
-      return;
-    }
-    root.hidden=false;
-    root.dataset.state='running';
-    root.dataset.run=String(run);
-    document.body.classList.add('page-is-assembling');
-    const columns=Math.max(5,Math.min(13,Math.ceil(innerWidth/105)));
-    const rows=Math.ceil(innerHeight/(innerWidth/columns));
-    root.style.setProperty('--tile-columns',columns);
-    root.style.setProperty('--tile-rows',rows);
-    const fragment=document.createDocumentFragment();
-    for(let y=0;y<rows;y++)for(let x=0;x<columns;x++){
-      const tile=document.createElement('span');
-      tile.className='page-assembly-tile';
-      tile.style.setProperty('--tile-hue',String(270+(x+y)%4*8));
-      tile.dataset.x=x;tile.dataset.y=y;
-      fragment.append(tile);
-    }
-    root.append(fragment);
-    const tiles=[...root.children];
-    tiles.forEach(tile=>{
-      const x=Number(tile.dataset.x),y=Number(tile.dataset.y);
-      const distance=Math.hypot((x-columns*.48)*.9,(y-rows*.38)*1.15);
-      const delay=180+distance*95+((x*7+y*11)%5)*28;
-      animations.push(tile.animate([
-        {opacity:1,transform:'perspective(700px) translate3d(0,0,0) rotateX(0deg) scale(1.025)',offset:0,background:'#100d18'},
-        {opacity:1,transform:'perspective(700px) translate3d(0,0,0) rotateX(0deg) scale(.94)',offset:.22,background:'#55336f'},
-        {opacity:.65,transform:'perspective(700px) translate3d(0,-9px,20px) rotateX(24deg) scale(.65)',offset:.56,background:'#392347'},
-        {opacity:0,transform:'perspective(700px) translate3d(0,-24px,70px) rotateX(65deg) scale(.12)',background:'#100d18'}
-      ],{duration:950,delay,easing:'cubic-bezier(.2,.65,.25,1)',fill:'both'}));
-    });
-    await Promise.all(animations.map(a=>a.finished.catch(()=>{})));
-    if(run!==sequence)return;
-    root.dataset.state='finished';
-    root.replaceChildren();
-    root.hidden=true;
-    document.body.classList.remove('page-is-assembling');
-    document.dispatchEvent(new Event('page-assembly-complete'));
-  }
-  document.querySelector('.motion-preference input')?.addEventListener('change',event=>{
-    if(!event.target.checked)stop();
-  });
-  function tryAutoplay(){
-    const loader=document.querySelector('#pageLoader');
-    if(autoplayDone||document.visibilityState!=='visible'||(loader&&!loader.classList.contains('is-hidden')))return;
-    autoplayDone=true;
-    observer?.disconnect();
-    document.removeEventListener('visibilitychange',tryAutoplay);
-    requestAnimationFrame(()=>requestAnimationFrame(assemble));
-  }
-  const loader=document.querySelector('#pageLoader');
-  const observer=loader?new MutationObserver(tryAutoplay):null;
-  observer?.observe(loader,{attributes:true,attributeFilter:['class']});
-  document.addEventListener('visibilitychange',tryAutoplay);
-  tryAutoplay();
-  // Never leave an opaque transition over an unusable page.
-  setTimeout(()=>{if(!autoplayDone){root.hidden=true;}},7000);
-})();
-
-
+// The circle intro owns the page entrance.
 (() => {
   const cards = [...document.querySelectorAll('.project-list .project-card')];
-  const setting = document.querySelector('.motion-preference input');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const allowed = () => setting ? setting.checked : !reduced.matches;
   cards.forEach(card => {
     card.classList.add('depth-card');
     const shine = document.createElement('span');
@@ -207,7 +100,6 @@ addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(upd
     let bounds, frame, timeout, lastX=.5, lastY=.5;
     function paint() {
       frame = 0;
-      if(!allowed()) return reset();
       card.style.setProperty('--depth-x',((.5-lastY)*10).toFixed(2)+'deg');
       card.style.setProperty('--depth-y',((lastX-.5)*12).toFixed(2)+'deg');
       card.style.setProperty('--depth-light-x',(lastX*100).toFixed(1)+'%');
@@ -217,7 +109,7 @@ addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(upd
       card.classList.add('depth-active');
     }
     function move(event) {
-      if(!allowed() || event.pointerType==='touch') return;
+      if(event.pointerType==='touch') return;
       bounds ||= card.getBoundingClientRect();
       lastX=Math.max(0,Math.min(1,(event.clientX-bounds.left)/bounds.width));
       lastY=Math.max(0,Math.min(1,(event.clientY-bounds.top)/bounds.height));
@@ -238,16 +130,14 @@ addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(upd
     card.addEventListener('pointerleave',reset);
     card.addEventListener('pointercancel',reset);
     card.addEventListener('pointerdown',event=>{
-      if(event.pointerType!=='touch'||!allowed())return;
+      if(event.pointerType!=='touch')return;
       lastX=.65;lastY=.35;paint();timeout=setTimeout(reset,400);
     },{passive:true});
     card.addEventListener('pointerup',event=>{
       if(event.pointerType==='touch'){clearTimeout(timeout);timeout=setTimeout(reset,180);}
     },{passive:true});
-    card.addEventListener('focusin',()=>{if(allowed()){lastX=.5;lastY=.4;paint();}});
+    card.addEventListener('focusin',()=>{lastX=.5;lastY=.4;paint();});
     card.addEventListener('focusout',event=>{if(!card.contains(event.relatedTarget))reset();});
-    setting?.addEventListener('change',reset);
-    reduced.addEventListener('change',reset);
     addEventListener('blur',reset);
   });
 })();
@@ -286,13 +176,9 @@ addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(upd
     controls.querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.device===device)));
     state.textContent=device==='mobile'?'Версия для телефона':'Версия для компьютера';
     const after=frame.getBoundingClientRect().width;
-    const motion=document.querySelector('.motion-preference input');
-    const enabled=motion?motion.checked:!matchMedia('(prefers-reduced-motion:reduce)').matches;
-    if(enabled){
       activeAnimation=frame.animate([{width:before+'px',borderRadius:oldRadius},{width:after+'px',borderRadius:device==='mobile'?'24px':'8px'}],{duration:700,easing:'cubic-bezier(.22,.75,.2,1)'});
       frame.querySelector('img[data-device="'+device+'"]').animate([{opacity:.25},{opacity:1}],{duration:500,easing:'ease-out'});
       await activeAnimation.finished.catch(()=>{});
-    }
     if(run===sequence)frame.dataset.transition='finished';
   }
   controls.querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>selectDevice(button.dataset.device)));
